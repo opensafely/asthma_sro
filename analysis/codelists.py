@@ -20,3 +20,20 @@ ld_codes = codelist_from_csv(
     system="ctv3",
     column="CTV3Code",
 )
+
+ast_cod = codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-ast_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+asttrt_cod = codelist_from_csv(
+    "codelists/opensafely-asthma-related-drug-treatment-codes.csv",
+    system="snomed",
+    column="code",
+)
+astres_cod= codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-astres_cod.csv",
+    system="snomed",
+    column="code",
+)

@@ -11,7 +11,7 @@ from cohortextractor import (
 )
 
 # Import codelists
-from codelists import codelist, ld_codes, nhse_care_homes_codes
+from codelists import *
 
 from config import start_date, end_date, codelist_path, demographics
 
@@ -30,25 +30,91 @@ study = StudyDefinition(
         "incidence": 0.1,
     },
     
+    # Define population parameters and denominator rules for:
+    # Business Rules for Quality and Outcomes Framework (QOF) 2021/22 - Asthma
+
+    # Resources
+    # Web: https://digital.nhs.uk/data-and-information/data-collections-and-data-sets/data-collections/quality-and-outcomes-framework-qof/quality-and-outcome-framework-qof-business-rules/qof-business-rules-v46.0-2021-2022-baseline-release
+    # Reference document: Asthma_v46.0.docx
+
+    # Indicator ID: AST005
+    # Description: Asthma Register: Patients aged at least 6 years old with an unresolved asthma diagnosis and have received asthma-related drug treatment in the preceding 12 months, up to the end of the reporting period
+
+
     population=patients.satisfying(
         """
         registered AND
         (NOT died) AND
         (sex = 'F' OR sex='M') AND
         (age_band != 'missing')
-        """,
 
-        registered=patients.registered_as_of(
+         # Asthma age restriction
+        age >= 6
+
+        """,
+   
+    ),
+
+    ast_population=patients.satisfying(
+        """
+        registered AND
+        (NOT died) AND
+        (sex = 'F' OR sex='M') AND
+        (age_band != 'missing')
+
+        # Asthma register rule 1
+        had_asthma AND
+        had_asthma_drug_treatment AND
+
+        # Asthma register rule 2
+        NOT had_asthma_resolve AND
+
+        # Asthma register rule 3
+        age >= 6
+
+        """,
+   
+    ),
+
+     registered=patients.registered_as_of(
             "index_date",
             return_expectations={"incidence": 0.9},
         ),
 
-        died=patients.died_from_any_cause(
+    died=patients.died_from_any_cause(
             on_or_before="index_date",
             returning="binary_flag",
             return_expectations={"incidence": 0.1}
         ),
-    ),
+
+    had_asthma=patients.categorised_as(
+            ast_cod,
+            on_or_before='end_date',
+            returning='binary_flag',
+            return_expectations={"incidence": 0.9}
+        ),
+
+    had_asthma_drug_treatment=patients.with_these_medications(
+           asttrt_cod,
+            between =["last_date_of_month(index_date) - 12 months", "last_date_of_month(index_date)"],
+            returning='binary_flag',
+            return_expectations={"incidence": 0.9}
+        ),
+
+    latest_asthma_diag_date=patients.with_these_clinical_events(
+            ast_cod,
+            on_or_before="last_date_of_month(index_date)",
+            returning="date",
+            date_format="YYYY-MM-DD",
+            find_last_match_in_period=True
+        ),
+       
+    had_asthma_resolve=patients.with_these_clinical_events(
+            astres_cod,
+            on_or_after="latest_asthma_diag_date",
+            returning="binary_flag",
+            return_expectations={"incidence": 0.01}
+       ),
 
     age=patients.age_as_of(
         "index_date",
@@ -161,31 +227,14 @@ study = StudyDefinition(
     ),
 
 
-    event =patients.with_these_clinical_events(
-        codelist=codelist,
-        between=["index_date", "last_day_of_month(index_date)"],
-        returning="binary_flag",
-        return_expectations={"incidence": 0.5}
-    ),
-
-    event_code=patients.with_these_clinical_events(
-        codelist=codelist,
-        between=["index_date", "last_day_of_month(index_date)"],
-        returning="code",
-        return_expectations={"category": {
-            "ratios": {x: 1/len(codelist_expectation_codes) for x in codelist_expectation_codes}}, }
-    ),
-    
-)
-
 # Create default measures
 measures = [
 
     Measure(
         id="event_code_rate",
-        numerator="event",
+        numerator="ast_population",
         denominator="population",
-        group_by=["event_code"],
+        group_by=["imd", "region"],
         small_number_suppression=True
     ),
 
