@@ -12,12 +12,6 @@
       "downloaded_at": "2021-04-13 15:03:59.415279Z",
       "sha": "ab5b5f60e8525af5898ec1066fc820501b8e5e29"
     },
-    "opensafely-systolic-blood-pressure-qof.csv": {
-      "id": "opensafely/systolic-blood-pressure-qof/3572b5fb",
-      "url": "https://codelists.opensafely.org/codelist/opensafely/systolic-blood-pressure-qof/3572b5fb/",
-      "downloaded_at": "2021-06-14 13:15:20.607476Z",
-      "sha": "f2bc461e351499f4e5573a6f94e760b99979491e"
-    },
     "opensafely-structured-medication-review-nhs-england.csv": {
       "id": "opensafely/structured-medication-review-nhs-england/5459205f",
       "url": "https://codelists.opensafely.org/codelist/opensafely/structured-medication-review-nhs-england/5459205f/",
@@ -29,6 +23,24 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/nhs-england-care-homes-residential-status/3712ef13/",
       "downloaded_at": "2021-05-10 16:07:53.643159Z",
       "sha": "357b2af4841e574f7d43bfeff143b39cdfed6997"
+    },
+    "nhsd-primary-care-domain-refsets-ast_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/ast_cod/4909d74a",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/ast_cod/4909d74a/",
+      "downloaded_at": "2022-02-22 11:46:51.960979Z",
+      "sha": "662adcbaa8823de22b7f56175420e454da595177"
+    },
+    "nhsd-primary-care-domain-refsets-astres_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/astres_cod/3f770244",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/astres_cod/3f770244/",
+      "downloaded_at": "2022-02-22 11:46:52.114935Z",
+      "sha": "98e2d004cc77c059f3383e22b6d909c561439040"
+    },
+    "opensafely-asthma-related-drug-treatment-codes.csv": {
+      "id": "opensafely/asthma-related-drug-treatment-codes/2c3f11a5",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/asthma-related-drug-treatment-codes/2c3f11a5/",
+      "downloaded_at": "2022-02-22 14:57:17.565248Z",
+      "sha": "7afa53b81d907bae23cb8d3d2cc950bfe625c373"
     }
   }
 }

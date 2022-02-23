@@ -19,7 +19,7 @@ codelist_df = pd.read_csv(codelist_path)
 codelist_expectation_codes = codelist_df['code'].unique()
 
 
-# Specifiy study defeinition
+# Specify study definition
 
 study = StudyDefinition(
     index_date=start_date,
