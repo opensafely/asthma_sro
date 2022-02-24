@@ -193,7 +193,7 @@ study = StudyDefinition(
             "5": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
         },
         index_of_multiple_deprivation=patients.address_as_of(
-            "index_date",
+            last_day_of_month("index_date"),
             returning="index_of_multiple_deprivation",
             round_to_nearest=100,
         ),
@@ -231,7 +231,7 @@ study = StudyDefinition(
 measures = [
 
     Measure(
-        id="event_code_rate",
+        id="ast_rate",
         numerator="ast_population",
         denominator="population",
         group_by=["imd", "region"],
@@ -240,7 +240,7 @@ measures = [
 
     Measure(
         id="practice_rate",
-        numerator="event",
+        numerator="ast_population",
         denominator="population",
         group_by=["practice"],
         small_number_suppression=False
@@ -255,7 +255,7 @@ measures = [
 
 for d in demographics:
 
-    if d == 'imd':
+    if d == ["imd", "region"]:
         apply_suppression = False
     
     else:
@@ -263,7 +263,7 @@ for d in demographics:
     
     m = Measure(
         id=f'{d}_rate',
-        numerator="event",
+        numerator="ast_population",
         denominator="population",
         group_by=[d],
         small_number_suppression=apply_suppression
