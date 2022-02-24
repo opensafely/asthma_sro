@@ -193,7 +193,7 @@ study = StudyDefinition(
             "5": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
         },
         index_of_multiple_deprivation=patients.address_as_of(
-            last_day_of_month("index_date"),
+            "last_day_of_month(index_date)",
             returning="index_of_multiple_deprivation",
             round_to_nearest=100,
         ),
@@ -224,7 +224,7 @@ study = StudyDefinition(
         returning="binary_flag",
         on_or_before="index_date",
         return_expectations={"incidence": 0.2}
-    ),
+    )
 
 )
 
