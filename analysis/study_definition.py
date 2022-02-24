@@ -226,7 +226,7 @@ study = StudyDefinition(
         return_expectations={"incidence": 0.2}
     ),
 
-
+)
 
 
 
@@ -266,7 +266,7 @@ for d in demographics:
     else:
         apply_suppression = True
     
-   m = Measure(
+    m = Measure(
         id=f'{d}_rate',
         numerator="ast_population",
         denominator="population",
@@ -274,6 +274,6 @@ for d in demographics:
         small_number_suppression=apply_suppression
     )
     
-   measures.append(m)
+    measures.append(m)
 
     
