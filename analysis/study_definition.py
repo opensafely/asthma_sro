@@ -227,11 +227,15 @@ study = StudyDefinition(
     ),
 
 
+
+
+
+
 # Create default measures
 measures = [
 
     Measure(
-        id="ast_rate",
+        id="event_code_rate",
         numerator="ast_population",
         denominator="population",
         group_by=["imd", "region"],
@@ -244,24 +248,25 @@ measures = [
         denominator="population",
         group_by=["practice"],
         small_number_suppression=False
-    ),
+    )
 
 
 
 ]
 
 
-#Add demographics measures
+#Add demographics measures#
+# Q - does this need to be included.
 
 for d in demographics:
 
-    if d == ["imd", "region"]:
+    if d == ["imd", "age_band"]:
         apply_suppression = False
     
     else:
         apply_suppression = True
     
-    m = Measure(
+   m = Measure(
         id=f'{d}_rate',
         numerator="ast_population",
         denominator="population",
@@ -269,6 +274,6 @@ for d in demographics:
         small_number_suppression=apply_suppression
     )
     
-    measures.append(m)
+   measures.append(m)
 
     
