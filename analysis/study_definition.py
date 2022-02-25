@@ -46,7 +46,7 @@ study = StudyDefinition(
         registered AND
         (NOT died) AND
         (sex = 'F' OR sex='M') AND
-        (age_band != 'missing')
+        (age_band != 'missing') AND
 
          # Asthma age restriction
         age >= 6
@@ -60,7 +60,7 @@ study = StudyDefinition(
         registered AND
         (NOT died) AND
         (sex = 'F' OR sex='M') AND
-        (age_band != 'missing')
+        (age_band != 'missing') AND
 
         # Asthma register rule 1
         had_asthma AND
