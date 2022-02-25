@@ -10,6 +10,7 @@ demographics = ["sex", "age_band", "region", "imd", "ethnicity", "learning_disab
 
 #name of measure
 marker="Asthma register"
+qof_measure_marker = "AST005"
 
 #codelist path
 codelist_path = "codelists/nhsd-primary-care-domain-refsets-ast_cod.csv"
