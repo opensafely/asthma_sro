@@ -65,6 +65,14 @@ study = StudyDefinition(
             return_expectations={"incidence": 0.9}
         ),
 
+    event_code=patients.with_these_medications(
+           asttrt_cod,
+            between =["last_day_of_month(index_date) - 365 days", "last_day_of_month(index_date)"],
+            returning='code',
+            return_expectations={"category": {
+            "ratios": {x: 1/len(codelist_expectation_codes) for x in codelist_expectation_codes}}, }
+        ),
+
     latest_asthma_diag_date=patients.with_these_clinical_events(
             ast_cod,
             on_or_before="last_day_of_month(index_date)",
@@ -162,8 +170,6 @@ study = StudyDefinition(
     ),
 
      
-
-
     practice=patients.registered_practice_as_of(
         "index_date",
         returning="pseudo_id",
@@ -245,10 +251,10 @@ measures = [
     ),
 
     Measure(
-        id="practice_rate",
+        id="event_code_rate",
         numerator="ast_population",
         denominator="population",
-        group_by=["practice"],
+        group_by=["event_code"],
         small_number_suppression=False
     )
 

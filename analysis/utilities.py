@@ -157,7 +157,7 @@ def create_child_table(
     """
  
     event_counts = (
-        df.groupby("event_code")["event"]
+        df.groupby("event_code")["ast_population"]
         .sum()  # We can't use .count() because the measure column contains zeros.
         .rename_axis(code_column)
         .rename("Events")
