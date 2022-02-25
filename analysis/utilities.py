@@ -155,6 +155,7 @@ def create_child_table(
     Returns:
         A table of the top `nrows` codes.
     """
+ 
     event_counts = (
         df.groupby("event_code")["event"]
         .sum()  # We can't use .count() because the measure column contains zeros.
