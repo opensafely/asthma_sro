@@ -9,41 +9,8 @@ from ebmdatalab import charts
 BASE_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
 
-# Create default measures
-measures = [
-
-     Measure(
-        id="event_rate",
-        numerator="ast_population",
-        denominator="population",
-        group_by=["imd", "region"],
-        small_number_suppression=True
-    ),
-
-    Measure(
-        id="event_code_rate",
-        numerator="ast_population",
-        denominator="population",
-        group_by=["event_code"],
-        small_number_suppression=False
-    )
-
-
-
-]
-
-#Add demographics measures
-
-for d in demographics:
- 
-    m = Measure(
-        id=f'{d}_rate',
-        numerator="ast_population",
-        denominator="population",
-        group_by=[d]
-    )
-    
-    measures.append(m)
+#import measures
+from study_definition import measures
 
 
 
@@ -51,6 +18,8 @@ measures_dict = {}
 
 for m in measures:
     measures_dict[m.id] = m
+ 
+print(measures_dict)
 
 
 for key, value in measures_dict.items():
@@ -75,7 +44,7 @@ for key, value in measures_dict.items():
 
 
     # get total population rate
-    if value.id=='practice_rate':
+    if value.id=='event_rate':
         
         df = drop_irrelevant_practices(df, 'practice')
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)
