@@ -246,7 +246,7 @@ measures = [
         id="event_rate",
         numerator="ast_population",
         denominator="population",
-        group_by=["imd", "region"],
+        group_by=["practice"],
         small_number_suppression=True
     ),
 
@@ -275,18 +275,18 @@ measures = [
 
 for d in demographics:
 
-    if d == ["imd", "age_band"]:
-        apply_suppression = False
+    # if d == ["imd", "age_band"]:
+    #     apply_suppression = False
     
-    else:
-        apply_suppression = True
+    # else:
+    #     apply_suppression = True
     
     m = Measure(
         id=f'{d}_rate',
         numerator="ast_population",
         denominator="population",
         group_by=[d],
-        small_number_suppression=apply_suppression
+        small_number_suppression=False
     )
     
     measures.append(m)
