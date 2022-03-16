@@ -2,7 +2,50 @@ import nbformat as nbf
 from config import demographics
 
 
-nb = nbf.v4.new_notebook()
+#nb = nbf.v4.new_notebook()
+
+nb_test= nbf.read('analysis/qof_notebook.ipynb',as_version=4)
+
+#nb_new_cells=nb_test.cells[2:8]
+
+cell_block_1=nb_test.cells[0]
+cell_block_2="""\
+display(
+md("# Service Restoration Observatory"),
+md(f"## Changes in {marker} between {start_date} and {end_date}"),
+md(f"Below are various time-series graphs showing changes in {marker} code use."),
+)
+"""
+cell_block_3=nb_test.cells[2]
+
+
+nb_new=nbf.v4.new_notebook()
+
+nb_new['cells']= [
+    cell_block_1,
+    nbf.v4.new_code_cell(cell_block_2),
+    cell_block_3
+]
+
+
+# nb_new.cells=nb_test.cells
+
+# nb_new.cells=nb_test.cells
+
+nbf.write(nb_new,'analysis/qof_notebook_test.ipynb',version=nbf.NO_CONVERT)
+
+
+
+
+
+
+
+test="""\
+display(
+md(f"# TEST TEST TEST"),
+md(f"## Changes in {marker} between {start_date} and {end_date}"),
+)
+"""
 
 
 imports = """\
@@ -78,38 +121,48 @@ md(f"Percentage of practices with a recording of a code within the codelist duri
 display(Image(filename='../output/decile_chart.png'))
 """
 
-nb['cells'] = [
-    nbf.v4.new_code_cell(imports),
-    nbf.v4.new_code_cell(header),
-    nbf.v4.new_code_cell(methods),
-    nbf.v4.new_code_cell(get_data),
-    nbf.v4.new_code_cell(output_total_title),
-    nbf.v4.new_code_cell(output_total_plot),
-    nbf.v4.new_code_cell(output_event_codes),
-    nbf.v4.new_code_cell(output_practice_title),
-    nbf.v4.new_code_cell(output_practice_plot),
-    ]
+# nb['cells'] = [
+#     nbf.v4.new_code_cell(test),
+#     nbf.v4.new_code_cell(imports),
+#     nbf.v4.new_code_cell(header),
+#     nbf.v4.new_code_cell(methods),
+#     nbf.v4.new_code_cell(get_data),
+#     nbf.v4.new_code_cell(output_total_title),
+#     nbf.v4.new_code_cell(output_total_plot),
+#     nbf.v4.new_code_cell(output_event_codes),
+#     nbf.v4.new_code_cell(output_practice_title),
+#     nbf.v4.new_code_cell(output_practice_plot),
+#     ]
 
-counter = """\
-i=0
-"""
+# counter = """\
+# i=0
+# """
 
-nb['cells'].append(nbf.v4.new_code_cell(counter))
+# nb['cells'].append(nbf.v4.new_code_cell(counter))
 
-for d in range(len(demographics)):
-    cell_counts = """\
-    display(
-    md(f"## Breakdown by {demographics[i]}")
-    )
+# for d in range(len(demographics)):
+#     cell_counts = """\
+#     display(
+#     md(f"## Breakdown by {demographics[i]}")
+#     )
    
-    """
-    nb['cells'].append(nbf.v4.new_code_cell(cell_counts))
+#     """
+#     nb['cells'].append(nbf.v4.new_code_cell(cell_counts))
     
-    cell_plot = """\
-    display(Image(filename=image_paths[demographics[i]]))
-    i+=1
-    """
-    nb['cells'].append(nbf.v4.new_code_cell(cell_plot))
+#     cell_plot = """\
+#     display(Image(filename=image_paths[demographics[i]]))
+#     i+=1
+#     """
+#     nb['cells'].append(nbf.v4.new_code_cell(cell_plot))
 
 
-nbf.write(nb, 'analysis/SRO_Notebook.ipynb')
+# nbf.write(nb, 'analysis/SRO_Notebook.ipynb')
+
+
+
+
+# nbf.write(nb_test, 'analysis/qof_notebook_test.ipynb')
+
+
+
+
