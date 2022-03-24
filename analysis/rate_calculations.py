@@ -30,7 +30,7 @@ for key, value in measures_dict.items():
     if key == "ethnicity_rate":
         df = convert_ethnicity(df)
         
-    df = calculate_rate(df, numerator=value.numerator, denominator=value.denominator, rate_per=1000)
+    df = calculate_rate(df, numerator=value.numerator, denominator=value.denominator, rate_per=100)
     
     if key == "imd_rate":
         df = calculate_imd_group(df, value.numerator, 'rate')
@@ -44,7 +44,7 @@ for key, value in measures_dict.items():
 
 
     # get total population rate
-    if value.id=='event_rate':
+    if value.id=='practice_rate':
         
         df = drop_irrelevant_practices(df, 'practice')
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)
@@ -54,14 +54,14 @@ for key, value in measures_dict.items():
         period_column='date',
         column='ast_population',
         title='Decile Chart',
-        ylabel='rate per 1000',
+        ylabel='Percentage',
         show_outer_percentiles=False,
         show_legend=True,
         ).savefig('output/decile_chart.png', bbox_inches='tight')  
         
         df_total = df.groupby(by='date')[[value.numerator, value.denominator]].sum().reset_index()
-        df_total = calculate_rate(df_total, numerator=value.numerator, denominator=value.denominator, rate_per=1000)
-        plot_measures(df_total, filename='plot_total.png', title='Population Rate', column_to_plot='rate', category=None, y_label='Rate per 1000')
+        df_total = calculate_rate(df_total, numerator=value.numerator, denominator=value.denominator, rate_per=100)
+        plot_measures(df_total, filename='plot_total.png', title='Population Rate', column_to_plot='rate', category=None, y_label='Percentage')
         df_total.to_csv(os.path.join(OUTPUT_DIR, 'rate_table_total.csv'), index=False)
 
     elif value.id=='event_code_rate':
@@ -71,5 +71,5 @@ for key, value in measures_dict.items():
         child_code_table.to_csv('output/child_code_table.csv', index=False)
 
     else:
-        plot_measures(df, filename=f'plot_{value.group_by[0]}.png', title=f'Breakdown by {value.group_by[0]}', column_to_plot='rate', category=value.group_by[0], y_label='Rate per 1000')
+        plot_measures(df, filename=f'plot_{value.group_by[0]}.png', title=f'Breakdown by {value.group_by[0]}', column_to_plot='rate', category=value.group_by[0], y_label='Percentage')
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)

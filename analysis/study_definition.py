@@ -246,8 +246,8 @@ measures = [
         id="event_rate",
         numerator="ast_population",
         denominator="population",
-        group_by=["practice"],
-        small_number_suppression=True
+        group_by="population",
+        small_number_suppression=False
     ),
 
     Measure(
