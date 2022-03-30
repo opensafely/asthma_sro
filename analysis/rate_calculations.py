@@ -67,8 +67,11 @@ for key, value in measures_dict.items():
         ast_decile.savefig("output/decile_chart.png", bbox_inches="tight")
 
         df_total = df.groupby(by='date')[[value.numerator, value.denominator]].sum().reset_index()
+
         df_total = calculate_rate(df_total, numerator=value.numerator, denominator=value.denominator, rate_per=100)
-        plot_measures(df_total, filename='plot_total.png', title='Population Rate', column_to_plot='rate', category=None, y_label=None)
+
+        plot_measures(df_total, filename='plot_total.png', title=None, column_to_plot='rate', category=None, y_label=None)
+       
         df_total.to_csv(os.path.join(OUTPUT_DIR, 'rate_table_total.csv'), index=False)
 
     elif value.id=='event_code_rate':
@@ -78,5 +81,13 @@ for key, value in measures_dict.items():
         child_code_table.to_csv('output/child_code_table.csv', index=False)
 
     else:
-        plot_measures(df, filename=f'plot_{value.group_by[0]}.png', title=f'Breakdown by {value.group_by[0]}', column_to_plot='rate', category=value.group_by[0], y_label=None)
+        plot_measures(
+                df, 
+                filename=f'plot_{value.group_by[0]}.png', 
+                title=None, 
+                column_to_plot='rate', 
+                category=value.group_by[0], 
+                y_label=None
+        )
+        
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)
