@@ -7,7 +7,7 @@ actions:
 
   
   generate_study_population:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2021-09-01 to 2022-03-31 by month" --output-dir=output
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2019-03-01 to 2022-03-31 by month" --output-dir=output
     outputs:
       highly_sensitive:
         cohort: output/input_*.csv
@@ -26,7 +26,7 @@ actions:
         cohort: output/input*.csv
 
   generate_study_population_practice_count:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_practice_count --index-date-range "2021-09-01 to 2022-03-31 by month" --output-dir=output
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_practice_count --index-date-range "2019-03-01 to 2022-03-31 by month" --output-dir=output
     outputs:
       highly_sensitive:
         cohort: output/input_practice_count_*.csv
@@ -47,6 +47,13 @@ actions:
           child_code_table: output/child_code_table.csv
           plots: output/plot_*.png
           decile_chart: output/decile_chart.png
+
+  generate_notebook:
+    run: jupyter:latest jupyter nbconvert /workspace/analysis/qof_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
+    needs: [calculate_rates, generate_study_population_practice_count]
+    outputs:
+      moderately_sensitive:
+        notebook: output/qof_notebook.html
 
   generate_deciles_charts:
     run: >

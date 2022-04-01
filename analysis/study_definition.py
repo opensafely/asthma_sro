@@ -41,12 +41,12 @@ study = StudyDefinition(
     # Description: Asthma Register: Patients aged at least 6 years old with an unresolved asthma diagnosis and have received asthma-related drug treatment in the preceding 12 months, up to the end of the reporting period
 
     registered=patients.registered_as_of(
-            "index_date",
+            "last_day_of_month(index_date)",
             return_expectations={"incidence": 0.9},
         ),
 
     died=patients.died_from_any_cause(
-            on_or_before="index_date",
+            on_or_before="last_day_of_month(index_date)",
             returning="binary_flag",
             return_expectations={"incidence": 0.1}
         ),
@@ -89,7 +89,7 @@ study = StudyDefinition(
        ),
 
     age=patients.age_as_of(
-        "index_date",
+        "last_day_of_month(index_date)" ,
         return_expectations={
             "rate": "universal",
             "int": {"distribution": "population_ages"},
@@ -171,14 +171,14 @@ study = StudyDefinition(
 
      
     practice=patients.registered_practice_as_of(
-        "index_date",
+        "last_day_of_month(index_date)",
         returning="pseudo_id",
         return_expectations={
             "int": {"distribution": "normal", "mean": 25, "stddev": 5}, "incidence": 0.5}
     ),
 
     region=patients.registered_practice_as_of(
-        "index_date",
+        "last_day_of_month(index_date)",
         returning="nuts1_region_name",
         return_expectations={"category": {"ratios": {
             "North East": 0.1,
@@ -222,7 +222,7 @@ study = StudyDefinition(
 
     learning_disability=patients.with_these_clinical_events(
         ld_codes,
-        on_or_before="index_date",
+        on_or_before="last_day_of_month(index_date)",
         returning="binary_flag",
         return_expectations={"incidence": 0.01, },
     ),
@@ -230,7 +230,7 @@ study = StudyDefinition(
     care_home_status=patients.with_these_clinical_events(
         nhse_care_homes_codes,
         returning="binary_flag",
-        on_or_before="index_date",
+        on_or_before="last_day_of_month(index_date)",
         return_expectations={"incidence": 0.2}
     )
 

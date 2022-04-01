@@ -8,7 +8,7 @@ ethnicity_codes = codelist_from_csv(
         "codelists/opensafely-ethnicity.csv",
         system="ctv3",
         column="Code",
-        category_column="Grouping_6",
+        category_column="Grouping_16",
     )
 
 nhse_care_homes_codes = codelist_from_csv("codelists/opensafely-nhs-england-care-homes-residential-status.csv",
