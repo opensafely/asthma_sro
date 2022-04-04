@@ -1,7 +1,7 @@
 opensafely/ethnicity/2020-04-27
-opensafely/learning-disabilities/2020-07-06
+nhsd-primary-care-domain-refsets/ld_cod/20210127
 opensafely/structured-medication-review-nhs-england/5459205f
-opensafely/nhs-england-care-homes-residential-status/3712ef13
+nhsd-primary-care-domain-refsets/carehome_cod/5d2f363a
 nhsd-primary-care-domain-refsets/ast_cod/4909d74a
 nhsd-primary-care-domain-refsets/astres_cod/3f770244
 opensafely/asthma-related-drug-treatment-codes/2c3f11a5/

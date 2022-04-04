@@ -6,11 +6,11 @@
       "downloaded_at": "2021-04-12 09:28:36.527864Z",
       "sha": "3d2f3998b71863a80b24d60f6f4282e14191ae13"
     },
-    "opensafely-learning-disabilities.csv": {
-      "id": "opensafely/learning-disabilities/2020-07-06",
-      "url": "https://codelists.opensafely.org/codelist/opensafely/learning-disabilities/2020-07-06/",
-      "downloaded_at": "2021-04-13 15:03:59.415279Z",
-      "sha": "ab5b5f60e8525af5898ec1066fc820501b8e5e29"
+    "nhsd-primary-care-domain-refsets-ld_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/ld_cod/20210127",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/ld_cod/20210127/",
+      "downloaded_at": "2022-04-04 14:31:08.318731Z",
+      "sha": "0c5bc3b050a55c2090e16932fd7364a0be775cb4"
     },
     "opensafely-structured-medication-review-nhs-england.csv": {
       "id": "opensafely/structured-medication-review-nhs-england/5459205f",
@@ -18,11 +18,11 @@
       "downloaded_at": "2021-05-10 15:47:23.153812Z",
       "sha": "7bd4843c423ef7618c6d8f27164dc0939f2c9a9a"
     },
-    "opensafely-nhs-england-care-homes-residential-status.csv": {
-      "id": "opensafely/nhs-england-care-homes-residential-status/3712ef13",
-      "url": "https://codelists.opensafely.org/codelist/opensafely/nhs-england-care-homes-residential-status/3712ef13/",
-      "downloaded_at": "2021-05-10 16:07:53.643159Z",
-      "sha": "357b2af4841e574f7d43bfeff143b39cdfed6997"
+    "nhsd-primary-care-domain-refsets-carehome_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/carehome_cod/5d2f363a",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/carehome_cod/5d2f363a/",
+      "downloaded_at": "2022-04-04 14:34:26.258752Z",
+      "sha": "11a75f8c271f6cd05276f49b038fbda8dfab77fe"
     },
     "nhsd-primary-care-domain-refsets-ast_cod.csv": {
       "id": "nhsd-primary-care-domain-refsets/ast_cod/4909d74a",

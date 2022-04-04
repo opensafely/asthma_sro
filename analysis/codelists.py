@@ -11,14 +11,14 @@ ethnicity_codes = codelist_from_csv(
         category_column="Grouping_16",
     )
 
-nhse_care_homes_codes = codelist_from_csv("codelists/opensafely-nhs-england-care-homes-residential-status.csv",
+nhse_care_homes_codes = codelist_from_csv("codelists/nhsd-primary-care-domain-refsets-carehome_cod.csv",
     system="snomed",
     column="code",)
 
 ld_codes = codelist_from_csv(
-    "codelists/opensafely-learning-disabilities.csv",
-    system="ctv3",
-    column="CTV3Code",
+    "codelists/nhsd-primary-care-domain-refsets-ld_cod.csv",
+    system="snomed",
+    column="code",
 )
 
 ast_cod = codelist_from_csv(
