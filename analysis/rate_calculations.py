@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import os
 from cohortextractor import Measure
-from config import demographics, codelist_path
+from config import demographics, codelist_path, vertical_lines
 from ebmdatalab import charts
 
 BASE_DIR = Path(__file__).parents[1]
@@ -32,7 +32,7 @@ for key, value in measures_dict.items():
         
     df = calculate_rate(df, numerator=value.numerator, denominator=value.denominator, rate_per=100)
     
-    if key == "imd_rate":
+    if key == "imd_rate": 
         df = calculate_imd_group(df, value.numerator, 'rate')
         df = redact_small_numbers(df, 5, value.numerator, value.denominator, 'rate')
     
@@ -58,7 +58,8 @@ for key, value in measures_dict.items():
             show_outer_percentiles=False,
             show_legend=True,
         )
-            
+        
+        add_date_lines(ast_decile, vertical_lines)    
         ast_decile.gcf().set_size_inches(15, 8)
         ast_decile.gca().set_yticklabels(
             ["{:.0f}%".format(x * 100) for x in ast_decile.gca().get_yticks()]
@@ -70,7 +71,15 @@ for key, value in measures_dict.items():
 
         df_total = calculate_rate(df_total, numerator=value.numerator, denominator=value.denominator, rate_per=100)
 
-        plot_measures(df_total, filename='plot_total.png', title=None, column_to_plot='rate', category=None, y_label=None)
+        plot_measures(
+            df_total, 
+            filename='plot_total.png', 
+            title=None, 
+            column_to_plot='rate', 
+            category=None, 
+            y_label=None,
+            vlines=vertical_lines
+            )
        
         df_total.to_csv(os.path.join(OUTPUT_DIR, 'rate_table_total.csv'), index=False)
 
@@ -87,7 +96,8 @@ for key, value in measures_dict.items():
                 title=None, 
                 column_to_plot='rate', 
                 category=value.group_by[0], 
-                y_label=None
+                y_label=None,
+                vlines=vertical_lines
         )
         
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)

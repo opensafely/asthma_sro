@@ -59,14 +59,14 @@ study = StudyDefinition(
         ),
 
     had_asthma_drug_treatment=patients.with_these_medications(
-           asttrt_cod,
+            asttrt_cod,
             between =["last_day_of_month(index_date) - 365 days", "last_day_of_month(index_date)"],
             returning='binary_flag',
             return_expectations={"incidence": 0.9}
         ),
 
     event_code=patients.with_these_medications(
-           asttrt_cod,
+            asttrt_cod,
             between =["last_day_of_month(index_date) - 365 days", "last_day_of_month(index_date)"],
             returning='code',
             return_expectations={"category": {
@@ -87,9 +87,10 @@ study = StudyDefinition(
             returning="binary_flag",
             return_expectations={"incidence": 0.01}
        ),
-
+# age_as_of function defaults to providing age at the beginning of the month specified. To 
+# get the age at the end of the month (actually 1 day after), add 1 day to the value to push to the next month
     age=patients.age_as_of(
-        "last_day_of_month(index_date)" ,
+        "last_day_of_month(index_date) + 1 day" ,
         return_expectations={
             "rate": "universal",
             "int": {"distribution": "population_ages"},
@@ -134,6 +135,7 @@ study = StudyDefinition(
         }
     ),
 
+# Asthma practice list size is restricted to those aged 6 and over in QOF
     population=patients.satisfying(
         """
         registered AND
@@ -148,13 +150,9 @@ study = StudyDefinition(
    
     ),
 
+# population restrictions will already be applied to this cohort using the special variable 'population'
     ast_population=patients.satisfying(
         """
-        registered AND
-        (NOT died) AND
-        (sex = 'F' OR sex='M') AND
-        (age_band != 'missing') AND
-
         # Asthma register rule 1
         had_asthma AND
         had_asthma_drug_treatment AND
@@ -194,11 +192,11 @@ study = StudyDefinition(
     imd=patients.categorised_as(
         {
             "0": "DEFAULT",
-            "1": """index_of_multiple_deprivation >=1 AND index_of_multiple_deprivation < 32844*1/5""",
+            "Most deprived - 1": """index_of_multiple_deprivation >=1 AND index_of_multiple_deprivation < 32844*1/5""",
             "2": """index_of_multiple_deprivation >= 32844*1/5 AND index_of_multiple_deprivation < 32844*2/5""",
             "3": """index_of_multiple_deprivation >= 32844*2/5 AND index_of_multiple_deprivation < 32844*3/5""",
             "4": """index_of_multiple_deprivation >= 32844*3/5 AND index_of_multiple_deprivation < 32844*4/5""",
-            "5": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
+            "Least deprived - 5": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
         },
         index_of_multiple_deprivation=patients.address_as_of(
             "last_day_of_month(index_date)",
@@ -210,11 +208,11 @@ study = StudyDefinition(
             "category": {
                 "ratios": {
                     "0": 0.05,
-                    "1": 0.19,
+                    "Most deprived - 1": 0.19,
                     "2": 0.19,
                     "3": 0.19,
                     "4": 0.19,
-                    "5": 0.19,
+                    "Least deprived - 5": 0.19,
                 }
             },
         },
@@ -247,7 +245,7 @@ measures = [
         numerator="ast_population",
         denominator="population",
         group_by="population",
-        small_number_suppression=False
+        small_number_suppression=True
     ),
 
     Measure(
@@ -255,7 +253,7 @@ measures = [
         numerator="ast_population",
         denominator="population",
         group_by=["event_code"],
-        small_number_suppression=False
+        small_number_suppression=True
     ),
 
     Measure(
@@ -263,7 +261,7 @@ measures = [
         numerator="ast_population",
         denominator="population",
         group_by=["practice"],
-        small_number_suppression=False,
+        small_number_suppression=True,
     ),
 
 
@@ -286,7 +284,7 @@ for d in demographics:
         numerator="ast_population",
         denominator="population",
         group_by=[d],
-        small_number_suppression=False
+        small_number_suppression=True
     )
     
     measures.append(m)
