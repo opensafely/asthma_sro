@@ -1,33 +1,13 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from dateutil import parser
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
-
-# NOT NEEDED ANYMORE
-# def calculate_imd_group(df, disease_column, rate_column):
-#     """Converts imd column from ordinal to quantiles and groups by these quintiles.
-    
-#     Args:
-#         df: measures df with "imd" column.
-#         disease_column: column name of events column
-#         rate_column: column name of rate column
-
-#     Returns:
-#         Measures dataframe by IMD quintile
-#     """
-    
-#     imd_column = pd.to_numeric(df["imd"])
-#     df["imd"] = pd.qcut(imd_column, q=5,duplicates="drop", labels=['Most deprived', '2', '3', '4', 'Least deprived'])   
-#     df_rate = df.groupby(by=["date", "imd"])[[rate_column]].mean().reset_index()
-#     df_population = df.groupby(by=["date", "imd"])[[disease_column, "population"]].sum().reset_index()
-#     df_merged = df_rate.merge(df_population, on=["date", "imd"], how="inner")
-    
-#     return df_merged[['imd', disease_column, 'population', rate_column, 'date']]
 
 def redact_small_numbers(df, n, numerator, denominator, rate_column):
     """Takes counts df as input and suppresses low numbers.  Sequentially redacts
@@ -111,7 +91,7 @@ def drop_missing_demographics(df, demographic):
     """
     return df.loc[df[demographic].notnull(),:]
 
-def calculate_rate(df, numerator, denominator, rate_per=1000):
+def calculate_rate(df, numerator, denominator, rate_per=100):
     """Creates a rate column for a dataframe with a numerator and denominator column.
     
     Args:
@@ -233,7 +213,15 @@ def add_date_lines(plt, vlines):
             continue
 
 
-def plot_measures(df, filename, title, column_to_plot, category=False, y_label=None, vlines=[]):
+def plot_measures(
+    df,
+    filename,
+    title,
+    column_to_plot,
+    category=False,
+    y_label=None,
+    vlines=[]
+):
     """Produce time series plot from measures table.  One line is plotted for each sub
     category within the category column.
 
@@ -244,30 +232,49 @@ def plot_measures(df, filename, title, column_to_plot, category=False, y_label=N
         category: Name of column indicating different categories
         y_label: String indicating y axis text
     """
-    plt.figure(figsize=(15,8))
+    plt.figure(figsize=(15, 8))
     if category:
         for unique_category in df[category].unique():
 
             df_subset = df[df[category] == unique_category]
 
-            plt.plot(df_subset['date'], df_subset[column_to_plot], marker='o')
+            plt.plot(df_subset["date"], df_subset[column_to_plot], marker="o")
     else:
-        plt.plot(df['date'], df[column_to_plot], marker='o')
+        plt.plot(df["date"], df[column_to_plot], marker="o")
 
     plt.ylabel(y_label)
-    plt.xlabel('Date')
-    plt.xticks(rotation='vertical')
+    plt.xlabel(None)
+    plt.xticks(rotation="horizontal")
+
     plt.title(title)
+
+    plt.rc("font", size=16)
+    plt.rc("axes", titlesize=16)
+    plt.rc("axes", labelsize=16)
+    plt.rc("xtick", labelsize=16)
+    plt.rc("ytick", labelsize=16)
+    plt.rc("legend", fontsize=16)
+    plt.rc("figure", titlesize=16)
+
+    plt.tight_layout()
+
+    plt.gca().set_yticklabels(
+        ["{:.0f}%".format(x) for x in plt.gca().get_yticks()]
+    )
+
+    plt.gca().xaxis.set_major_formatter(
+        mdates.ConciseDateFormatter(plt.gca().xaxis.get_major_locator())
+    )
 
     add_date_lines(plt, vlines)
 
     if category:
-        plt.legend(df[category].unique(), bbox_to_anchor=(
-            1.04, 1), loc="upper left")
+        plt.legend(df[category].unique(), loc="lower right")
 
     else:
         pass
-    
+
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / filename)
     plt.clf()
+
