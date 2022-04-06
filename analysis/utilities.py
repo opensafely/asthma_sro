@@ -8,6 +8,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
 
+# NOT NEEDED ANYMORE
 # def calculate_imd_group(df, disease_column, rate_column):
 #     """Converts imd column from ordinal to quantiles and groups by these quintiles.
     

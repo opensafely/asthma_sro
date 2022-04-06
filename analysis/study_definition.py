@@ -192,11 +192,11 @@ study = StudyDefinition(
     imd=patients.categorised_as(
         {
             "Unknown": "DEFAULT",
-            "Most deprived - 1": """index_of_multiple_deprivation >=1 AND index_of_multiple_deprivation < 32844*1/5""",
+            "1 - Most deprived": """index_of_multiple_deprivation >=1 AND index_of_multiple_deprivation < 32844*1/5""",
             "2": """index_of_multiple_deprivation >= 32844*1/5 AND index_of_multiple_deprivation < 32844*2/5""",
             "3": """index_of_multiple_deprivation >= 32844*2/5 AND index_of_multiple_deprivation < 32844*3/5""",
             "4": """index_of_multiple_deprivation >= 32844*3/5 AND index_of_multiple_deprivation < 32844*4/5""",
-            "Least deprived - 5": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
+            "5 - Least deprived": """index_of_multiple_deprivation >= 32844*4/5 AND index_of_multiple_deprivation < 32844""",
         },
         index_of_multiple_deprivation=patients.address_as_of(
             "last_day_of_month(index_date)",
