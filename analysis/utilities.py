@@ -8,25 +8,26 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
 
-def calculate_imd_group(df, disease_column, rate_column):
-    """Converts imd column from ordinal to quantiles and groups by these quintiles.
+# NOT NEEDED ANYMORE
+# def calculate_imd_group(df, disease_column, rate_column):
+#     """Converts imd column from ordinal to quantiles and groups by these quintiles.
     
-    Args:
-        df: measures df with "imd" column.
-        disease_column: column name of events column
-        rate_column: column name of rate column
+#     Args:
+#         df: measures df with "imd" column.
+#         disease_column: column name of events column
+#         rate_column: column name of rate column
 
-    Returns:
-        Measures dataframe by IMD quintile
-    """
+#     Returns:
+#         Measures dataframe by IMD quintile
+#     """
     
-    imd_column = pd.to_numeric(df["imd"])
-    df["imd"] = pd.qcut(imd_column, q=5,duplicates="drop", labels=['Most deprived', '2', '3', '4', 'Least deprived'])   
-    df_rate = df.groupby(by=["date", "imd"])[[rate_column]].mean().reset_index()
-    df_population = df.groupby(by=["date", "imd"])[[disease_column, "population"]].sum().reset_index()
-    df_merged = df_rate.merge(df_population, on=["date", "imd"], how="inner")
+#     imd_column = pd.to_numeric(df["imd"])
+#     df["imd"] = pd.qcut(imd_column, q=5,duplicates="drop", labels=['Most deprived', '2', '3', '4', 'Least deprived'])   
+#     df_rate = df.groupby(by=["date", "imd"])[[rate_column]].mean().reset_index()
+#     df_population = df.groupby(by=["date", "imd"])[[disease_column, "population"]].sum().reset_index()
+#     df_merged = df_rate.merge(df_population, on=["date", "imd"], how="inner")
     
-    return df_merged[['imd', disease_column, 'population', rate_column, 'date']]
+#     return df_merged[['imd', disease_column, 'population', rate_column, 'date']]
 
 def redact_small_numbers(df, n, numerator, denominator, rate_column):
     """Takes counts df as input and suppresses low numbers.  Sequentially redacts
