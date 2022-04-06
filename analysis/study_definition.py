@@ -191,7 +191,7 @@ study = StudyDefinition(
     
     imd=patients.categorised_as(
         {
-            "0": "DEFAULT",
+            "Unknown": "DEFAULT",
             "Most deprived - 1": """index_of_multiple_deprivation >=1 AND index_of_multiple_deprivation < 32844*1/5""",
             "2": """index_of_multiple_deprivation >= 32844*1/5 AND index_of_multiple_deprivation < 32844*2/5""",
             "3": """index_of_multiple_deprivation >= 32844*2/5 AND index_of_multiple_deprivation < 32844*3/5""",
@@ -207,12 +207,12 @@ study = StudyDefinition(
             "rate": "universal",
             "category": {
                 "ratios": {
-                    "0": 0.05,
-                    "Most deprived - 1": 0.19,
+                    "Unknown": 0.05,
+                    "1 - Most deprived": 0.19,
                     "2": 0.19,
                     "3": 0.19,
                     "4": 0.19,
-                    "Least deprived - 5": 0.19,
+                    "5 - Least deprived": 0.19,
                 }
             },
         },
