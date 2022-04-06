@@ -55,15 +55,15 @@ actions:
       moderately_sensitive:
         notebook: output/qof_notebook.html
 
-  generate_deciles_charts:
-    run: >
-      deciles-charts:v0.0.2
-        --input_dir output  
-        --output_dir output
-    needs: [generate_measures]
-    outputs:
-      moderately_sensitive:
-        deciles_charts: output/deciles_chart_*.png
+  # generate_deciles_charts:
+  #   run: >
+  #     deciles-charts:v0.0.2
+  #       --input_dir output  
+  #       --output_dir output
+  #   needs: [generate_measures]
+  #   outputs:
+  #     moderately_sensitive:
+  #       deciles_charts: output/deciles_chart_*.png
 
     # run_tests:
   #   run: python:latest python -m pytest --junit-xml=output/pytest.xml --verbose
