@@ -256,10 +256,12 @@ def plot_measures(
     plt.rc("legend", fontsize=16)
     plt.rc("figure", titlesize=16)
 
-    plt.tight_layout()
+    # yticks = np.arange(5)
+    # plt.set_yticks(yticks)
+    plt.ylim(bottom=0, top=1)
 
     plt.gca().set_yticklabels(
-        ["{:.0f}%".format(x) for x in plt.gca().get_yticks()]
+        ["{:.1f}%".format(x) for x in plt.gca().get_yticks()]
     )
 
     plt.gca().xaxis.set_major_formatter(

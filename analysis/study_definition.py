@@ -248,13 +248,13 @@ measures = [
         small_number_suppression=True
     ),
 
-    Measure(
-        id="event_code_rate",
-        numerator="ast_population",
-        denominator="population",
-        group_by=["event_code"],
-        small_number_suppression=True
-    ),
+    # Measure(
+    #     id="event_code_rate",
+    #     numerator="ast_population",
+    #     denominator="population",
+    #     group_by=["event_code"],
+    #     small_number_suppression=True
+    # ),
 
     Measure(
         id="practice_rate",
