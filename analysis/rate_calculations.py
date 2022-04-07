@@ -82,11 +82,11 @@ for key, value in measures_dict.items():
        
         df_total.to_csv(os.path.join(OUTPUT_DIR, 'rate_table_total.csv'), index=False)
 
-    elif value.id=='event_code_rate':
-        df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)
-        codelist = pd.read_csv(codelist_path)
-        child_code_table = create_child_table(df=df, code_df=codelist, code_column='code', term_column='term')
-        child_code_table.to_csv('output/child_code_table.csv', index=False)
+    # elif value.id=='event_code_rate':
+    #     df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)
+    #     codelist = pd.read_csv(codelist_path)
+    #     child_code_table = create_child_table(df=df, code_df=codelist, code_column='code', term_column='term')
+    #     child_code_table.to_csv('output/child_code_table.csv', index=False)
 
     else:
         plot_measures(
