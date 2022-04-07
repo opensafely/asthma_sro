@@ -44,7 +44,6 @@ actions:
       outputs:
         moderately_sensitive:
           tables: output/rate_table_*.csv
-          child_code_table: output/child_code_table.csv
           plots: output/plot_*.png
           decile_chart: output/decile_chart.png
 
