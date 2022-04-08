@@ -99,7 +99,7 @@ study = StudyDefinition(
 
     age_band=patients.categorised_as(
         {
-            "missing": "DEFAULT",
+            "Unknown": "DEFAULT",
             "0-19": """ age >= 0 AND age < 20""",
             "20-29": """ age >=  20 AND age < 30""",
             "30-39": """ age >=  30 AND age < 40""",
@@ -141,7 +141,7 @@ study = StudyDefinition(
         registered AND
         (NOT died) AND
         (sex = 'F' OR sex='M') AND
-        (age_band != 'missing') AND
+        (age_band != 'Unknown') AND
 
          # Asthma age restriction
         age >= 6
