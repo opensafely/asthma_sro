@@ -258,7 +258,7 @@ def plot_measures(
 
     # yticks = np.arange(5)
     # plt.set_yticks(yticks)
-    plt.ylim(bottom=0, top=1)
+    plt.ylim(bottom=0, top=20)
 
     plt.gca().set_yticklabels(
         ["{:.1f}%".format(x) for x in plt.gca().get_yticks()]
