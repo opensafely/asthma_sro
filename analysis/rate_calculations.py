@@ -61,7 +61,7 @@ for key, value in measures_dict.items():
         add_date_lines(ast_decile, vertical_lines)    
         ast_decile.gcf().set_size_inches(15, 8)
         ast_decile.gca().set_yticklabels(
-            ["{:.0f}%".format(x * 100) for x in ast_decile.gca().get_yticks()]
+            ["{:.1f}%".format(x * 100) for x in ast_decile.gca().get_yticks()]
         )
    
         ast_decile.savefig("output/decile_chart.png", bbox_inches="tight")

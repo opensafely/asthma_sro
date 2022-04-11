@@ -271,7 +271,7 @@ def plot_measures(
     add_date_lines(plt, vlines)
 
     if category:
-        plt.legend(df[category].unique(), loc="lower right")
+        plt.legend(df[category].unique(), loc="upper right")
 
     else:
         pass
