@@ -244,17 +244,17 @@ def plot_measures(
 
     plt.ylabel(y_label)
     plt.xlabel(None)
-    plt.xticks(rotation="horizontal")
+    # plt.xticks(rotation="horizontal")
 
     plt.title(title)
 
-    plt.rc("font", size=16)
-    plt.rc("axes", titlesize=16)
-    plt.rc("axes", labelsize=16)
-    plt.rc("xtick", labelsize=16)
-    plt.rc("ytick", labelsize=16)
-    plt.rc("legend", fontsize=16)
-    plt.rc("figure", titlesize=16)
+    plt.rc("font", size=14)
+    plt.rc("axes", titlesize=14)
+    plt.rc("axes", labelsize=14)
+    plt.rc("xtick", labelsize=14)
+    plt.rc("ytick", labelsize=14)
+    plt.rc("legend", fontsize=14)
+    plt.rc("figure", titlesize=14)
 
     # yticks = np.arange(5)
     # plt.set_yticks(yticks)
@@ -264,10 +264,11 @@ def plot_measures(
         ["{:.1f}%".format(x) for x in plt.gca().get_yticks()]
     )
 
-    plt.gca().xaxis.set_major_formatter(
-        mdates.ConciseDateFormatter(plt.gca().xaxis.get_major_locator())
-    )
-
+    myFmt = mdates.DateFormatter('%b-%Y')
+    plt.gca().xaxis.set_major_formatter(myFmt)
+    
+    plt.xticks(rotation = 45)
+   
     add_date_lines(plt, vlines)
 
     if category:
