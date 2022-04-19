@@ -140,8 +140,6 @@ study = StudyDefinition(
         """
         registered AND
         (NOT died) AND
-        (sex = 'F' OR sex='M') AND
-        (age_band != 'Unknown') AND
 
          # Asthma age restriction
         age >= 6
