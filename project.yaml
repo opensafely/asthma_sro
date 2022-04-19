@@ -54,18 +54,36 @@ actions:
       moderately_sensitive:
         notebook: output/qof_notebook.html
 
-  # generate_deciles_charts:
-  #   run: >
-  #     deciles-charts:v0.0.2
-  #       --input_dir output  
-  #       --output_dir output
-  #   needs: [generate_measures]
-  #   outputs:
-  #     moderately_sensitive:
-  #       deciles_charts: output/deciles_chart_*.png
 
-    # run_tests:
-  #   run: python:latest python -m pytest --junit-xml=output/pytest.xml --verbose
-  #   outputs:
-  #     moderately_sensitive:
-  #       log: output/pytest.xml
+# Asthma register (ast_reg)
+  generate_study_population_ast_reg:
+    run: > 
+      cohortextractor:latest generate_cohort 
+      --study-definition study_definition_ast_reg 
+      --index-date-range "2021-04-01 to 2022-03-01 by month" 
+      --output-dir=output
+      --output-format=csv
+    outputs:
+      highly_sensitive:
+        cohort: output/input_ast_reg*.csv
+  
+  join_ethnicity_ast_reg:
+    run: >
+      cohort-joiner:v0.0.12 
+        --lhs output/input_ast*.csv
+        --rhs output/input_ethnicity*.csv
+        --output-dir output/joined
+    needs: [generate_study_population_ethnicity, generate_study_population_ast_reg]
+    outputs:
+      highly_sensitive:
+        cohort: output/joined/input_ast*.csv
+
+  generate_measures_ast_reg:
+     run: >
+       cohortextractor:latest generate_measures 
+       --study-definition study_definition_ast_reg 
+       --output-dir=output/joined
+     needs: [join_ethnicity_ast_reg]
+     outputs:
+       moderately_sensitive:
+         measure_csv: output/joined/measure_ast_reg_*_rate.csv
