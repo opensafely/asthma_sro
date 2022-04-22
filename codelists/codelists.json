@@ -41,6 +41,30 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/asthma-related-drug-treatment-codes/2c3f11a5/",
       "downloaded_at": "2022-02-22 14:57:17.565248Z",
       "sha": "7afa53b81d907bae23cb8d3d2cc950bfe625c373"
+    },
+    "nhsd-primary-care-domain-refsets-rev_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/rev_cod/20200812",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/rev_cod/20200812/",
+      "downloaded_at": "2022-04-21 15:53:53.820973Z",
+      "sha": "6f6f0221706d28a49d74f3c3edc5c627d2cc618c"
+    },
+    "nhsd-primary-care-domain-refsets-astcontass_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/astcontass_cod/20200812",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/astcontass_cod/20200812/",
+      "downloaded_at": "2022-04-21 15:53:53.963585Z",
+      "sha": "edae7dc6fad039f2fb9d49e3c84ee4265e18312e"
+    },
+    "nhsd-primary-care-domain-refsets-writpastp_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/writpastp_cod/20200812",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/writpastp_cod/20200812/",
+      "downloaded_at": "2022-04-21 15:53:54.115752Z",
+      "sha": "3d6733e5ff7e13df9279e60261b7b5545daa326e"
+    },
+    "nhsd-primary-care-domain-refsets-astexacb_cod.csv": {
+      "id": "nhsd-primary-care-domain-refsets/astexacb_cod/20200812",
+      "url": "https://codelists.opensafely.org/codelist/nhsd-primary-care-domain-refsets/astexacb_cod/20200812/",
+      "downloaded_at": "2022-04-21 15:53:54.256084Z",
+      "sha": "5e902f60294cbb014ecb7dbcd41917736c229ff7"
     }
   }
 }
