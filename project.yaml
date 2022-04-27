@@ -55,7 +55,7 @@ actions:
         notebook: output/qof_notebook.html
 
 
-# Asthma register (ast_reg)
+# Asthma register (ast_reg) Dictionary method actions
   generate_study_population_ast_reg:
     run: > 
       cohortextractor:latest generate_cohort 
@@ -87,3 +87,23 @@ actions:
      outputs:
        moderately_sensitive:
          measure_csv: output/joined/measure_ast_reg_*_rate.csv
+
+# Asthma indicator (AST007) actions
+
+  generate_study_population_ast007:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_ast007 --index-date-range "2019-03-01 to 2022-03-31 by month" --output-dir=output
+    outputs:
+      highly_sensitive:
+        cohort: output/input_ast007_*.csv
+
+
+
+
+
+
+
+
+
+
+
+

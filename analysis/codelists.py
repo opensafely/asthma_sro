@@ -32,8 +32,37 @@ asttrt_cod = codelist_from_csv(
     system="snomed",
     column="code",
 )
+
 astres_cod= codelist_from_csv(
     "codelists/nhsd-primary-care-domain-refsets-astres_cod.csv",
     system="snomed",
     column="code",
 )
+
+rev_cod=codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-rev_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+writpastp_cod=codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-writpastp_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+astcontass_cod=codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-astcontass_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+astexacb_cod=codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-astexacb_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+
+
+
