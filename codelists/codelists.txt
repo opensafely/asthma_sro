@@ -9,3 +9,7 @@ nhsd-primary-care-domain-refsets/rev_cod/20200812/
 nhsd-primary-care-domain-refsets/astcontass_cod/20200812/
 nhsd-primary-care-domain-refsets/writpastp_cod/20200812/
 nhsd-primary-care-domain-refsets/astexacb_cod/20200812/
+nhsd-primary-care-domain-refsets/astpcapu_cod/20200812/
+nhsd-primary-care-domain-refsets/astmondec_cod/20200812/
+nhsd-primary-care-domain-refsets/astpcadec_cod/20200812/
+nhsd-primary-care-domain-refsets/astinvite_cod/20200812/

@@ -1,6 +1,8 @@
 
 # Import functions
 import json
+from ssl import ALERT_DESCRIPTION_DECODE_ERROR
+from xmlrpc.server import resolve_dotted_attribute
 import pandas as pd
 
 from cohortextractor import (
@@ -57,7 +59,10 @@ study = StudyDefinition(
             ast_cod,
             on_or_before="last_day_of_month(index_date)",
             returning='binary_flag',
-            return_expectations={"incidence": 0.9}
+            return_expectations={"incidence": 0.9},
+            include_date_of_match=True,
+            date_format="YYYY-MM-DD",
+            find_last_match_in_period=True,
         ),
 
     had_asthma_drug_treatment=patients.with_these_medications(
@@ -74,18 +79,10 @@ study = StudyDefinition(
             return_expectations={"category": {
             "ratios": {x: 1/len(codelist_expectation_codes) for x in codelist_expectation_codes}}, }
         ),
-
-    latest_asthma_diag_date=patients.with_these_clinical_events(
-            ast_cod,
-            on_or_before="last_day_of_month(index_date)",
-            returning="date",
-            date_format="YYYY-MM-DD",
-            find_last_match_in_period=True
-        ),
        
     had_asthma_resolve=patients.with_these_clinical_events(
             astres_cod,
-            on_or_after="latest_asthma_diag_date",
+            on_or_after="had_asthma_date",
             returning="binary_flag",
             return_expectations={"incidence": 0.01}
        ),
@@ -166,31 +163,130 @@ study = StudyDefinition(
         """,
     
     ),
-
+##############################
 # Rule 1 
-   
 
+# Asthma review and written personalised asthma plan occurring on the same day and within the last 12 months
     rev_dat=patients.with_these_clinical_events(
-            codelist = (rev_cod, writpastp_cod),
+            codelist = rev_writ_codes,
             between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
             returning="date",
             date_format="YYYY-MM-DD",
             find_last_match_in_period=True,
+            return_expectations = {
+                "date": {"earliest": "2018-03-01", "latest": "index_date"},
+                "incidence": 0.9
+            },
         ),     
 
+# Asthma control assessment within 1 month of asthma review date
     astcontass_dat=patients.with_these_clinical_events(
-            astcontass_cod,
+            codelist = astcontass_cod,
             between=["rev_dat -  1 month", "rev_dat"],
             returning="binary_flag",
-            return_expectations={"incidence": 0.01},
+            return_expectations={"incidence": 0.10},
         ),
 
+# Asthma exacerbations recorded within 1 month of asthma review date
     astexac_dat=patients.with_these_clinical_events(
-            astexacb_cod,
+            codelist = astexacb_cod,
             between=["rev_dat - 1 month", "rev_dat"],
             returning="binary_flag",
-            return_expectations={"incidence": 0.01},
+            return_expectations={"incidence": 0.10},
         ),
+
+# Rule 1 logic
+    ast007_rule1=patients.satisfying(
+            """
+            rev_dat AND
+            astcontass_dat AND
+            astexac_dat
+            """
+    ),
+##############################
+ 
+ # Rule 2
+
+ # People for who Asthma quality indicator care was unsuitable in previous 12 months
+    astpcacu=patients.with_these_clinical_events(
+            codelist=astpcapu_cod,
+            between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
+            returning="binary_flag",
+            return_expectations={"incidence": 0.10},
+        ),
+##############################
+ 
+ # Rule 3
+
+# People who chose not to receive asthma monitoring in previous 12 months
+    astmondec=patients.with_these_clinical_events(
+            codelist=astmondec_cod,
+            between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
+            returning="binary_flag",
+            return_expectations={"incidence": 0.10},
+    ),
+##############################
+ 
+ # Rule 4
+
+# People who chose not to receive astha quality indicator care in previous 12 months
+    astpcadec=patients.with_these_clinical_events(
+            codelist=astpcadec_cod,
+            between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
+            returning="binary_flag",
+            return_expectations={"incidence": 0.10},
+    ),
+##############################
+ 
+ # Rule 5
+
+#     # Latest asthma invite date
+    astinvite_2=patients.with_these_clinical_events(
+        codelist=astinvite_cod,
+        returning="binary_flag",
+        find_last_match_in_period=True,
+        between=[
+            "first_day_of_month(index_date) - 11 months",
+            "last_day_of_month(index_date)",
+        ],
+        include_date_of_match=True,
+        date_format="YYYY-MM-DD",
+    ),
+    # Latest asthma invite date 7 days before the last one
+    astinvite_1=patients.with_these_clinical_events(
+        codelist=astinvite_cod,
+        returning="binary_flag",
+        find_last_match_in_period=True,
+        between=[
+            "first_day_of_month(index_date) - 11 months",
+            "astinvite_2_date - 7 days",
+        ],
+    ),
+##############################
+ 
+ # Rule 6
+
+ # Exclude people who were diagnoses with asthma in the last 3 months
+    ast_recent_diag_excl=patients.satisfying(
+        """
+        
+        """,
+        first_ast_diag=patients.with_these_clinical_events(
+                    ast_cod,
+                    on_or_before="last_day_of_month(index_date)",
+                    returning='date',
+                    date_format="YYYY-MM-DD",
+                    find_first_match_in_period=True,
+            ),
+
+    )
+            
+            
+
+            
+
+
+
 
 ################################################################################################
     practice=patients.registered_practice_as_of(
