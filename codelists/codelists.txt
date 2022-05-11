@@ -5,6 +5,11 @@ nhsd-primary-care-domain-refsets/carehome_cod/5d2f363a
 nhsd-primary-care-domain-refsets/ast_cod/4909d74a
 nhsd-primary-care-domain-refsets/astres_cod/3f770244
 opensafely/asthma-related-drug-treatment-codes/2c3f11a5/
-
-
-
+nhsd-primary-care-domain-refsets/rev_cod/20200812/
+nhsd-primary-care-domain-refsets/astcontass_cod/20200812/
+nhsd-primary-care-domain-refsets/writpastp_cod/20200812/
+nhsd-primary-care-domain-refsets/astexacb_cod/20200812/
+nhsd-primary-care-domain-refsets/astpcapu_cod/20200812/
+nhsd-primary-care-domain-refsets/astmondec_cod/20200812/
+nhsd-primary-care-domain-refsets/astpcadec_cod/20200812/
+nhsd-primary-care-domain-refsets/astinvite_cod/20200812/

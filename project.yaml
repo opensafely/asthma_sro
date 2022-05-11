@@ -55,7 +55,7 @@ actions:
         notebook: output/qof_notebook.html
 
 
-# Asthma register (ast_reg)
+# Asthma register (ast_reg) Dictionary method actions
   generate_study_population_ast_reg:
     run: > 
       cohortextractor:latest generate_cohort 
