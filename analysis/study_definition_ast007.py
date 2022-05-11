@@ -166,23 +166,37 @@ study = StudyDefinition(
 ##############################
 # Rule 1 
 
-# Asthma review and written personalised asthma plan occurring on the same day and within the last 12 months
-    rev_dat=patients.with_these_clinical_events(
-            codelist = rev_writ_codes,
-            between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
-            returning="date",
+# Asthma review occurring within the last 12 months
+    ast_rev=patients.with_these_clinical_events(
+            codelist = rev_writ_codes, #THIS DOESN'T WORK - USE PATIENTS.SATISFYING
+            between=["first_day_of_month(index_date) - 11 months","last_day_of_month(index_date)"],
+            returning="binary_flag",
+            include_date_of_match=True,
             date_format="YYYY-MM-DD",
             find_last_match_in_period=True,
             return_expectations = {
-                "date": {"earliest": "2018-03-01", "latest": "index_date"},
+                "date": {"earliest": "2019-03-01", "latest": "index_date"},
                 "incidence": 0.9
             },
         ),     
 
+# Asthma written personalised asthma plan  on the same day and within the last 12 months
+    ast_writpastp=patients.with_these_clinical_events(
+            codelist = writpastp_cod, #THIS DOESN'T WORK - USE PATIENTS.SATISFYING
+            between=["ast_rev_date - 1 day","ast_rev_date"],
+            returning="date",
+            date_format="YYYY-MM-DD",
+            find_last_match_in_period=True,
+            return_expectations = {
+                "date": {"earliest": "2019-03-01", "latest": "index_date"},
+                "incidence": 0.9
+            },
+        ),         
+
 # Asthma control assessment within 1 month of asthma review date
     astcontass_dat=patients.with_these_clinical_events(
             codelist = astcontass_cod,
-            between=["rev_dat -  1 month", "rev_dat"],
+            between=["ast_rev_date -  1 month", "ast_rev_date"],
             returning="binary_flag",
             return_expectations={"incidence": 0.10},
         ),
@@ -190,7 +204,7 @@ study = StudyDefinition(
 # Asthma exacerbations recorded within 1 month of asthma review date
     astexac_dat=patients.with_these_clinical_events(
             codelist = astexacb_cod,
-            between=["rev_dat - 1 month", "rev_dat"],
+            between=["ast_rev_date - 1 month", "ast_rev_date"],
             returning="binary_flag",
             return_expectations={"incidence": 0.10},
         ),
@@ -198,17 +212,21 @@ study = StudyDefinition(
 # Rule 1 logic
     ast007_rule1=patients.satisfying(
             """
-            rev_dat AND
+            ast_rev AND
             astcontass_dat AND
             astexac_dat
             """
     ),
+
+#rev_dat count
+
+
 ##############################
  
  # Rule 2
 
  # People for who Asthma quality indicator care was unsuitable in previous 12 months
-    astpcacu=patients.with_these_clinical_events(
+    astpcapu=patients.with_these_clinical_events(
             codelist=astpcapu_cod,
             between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
             returning="binary_flag",
@@ -229,7 +247,7 @@ study = StudyDefinition(
  
  # Rule 4
 
-# People who chose not to receive astha quality indicator care in previous 12 months
+# People who chose not to receive asthma quality indicator care in previous 12 months
     astpcadec=patients.with_these_clinical_events(
             codelist=astpcadec_cod,
             between=["last_day_of_month(index_date) - 365 days","last_day_of_month(index_date)"],
@@ -241,49 +259,69 @@ study = StudyDefinition(
  # Rule 5
 
 #     # Latest asthma invite date
+    astinvite_1=patients.with_these_clinical_events(
+        codelist=astinvite_cod,
+        returning="binary_flag",
+        find_last_match_in_period=True,
+        on_or_before="last_day_of_month(index_date)",
+        include_date_of_match=True,
+        date_format="YYYY-MM-DD",
+    ),
+    # Latest asthma invite date 7 days before the last one
     astinvite_2=patients.with_these_clinical_events(
         codelist=astinvite_cod,
         returning="binary_flag",
         find_last_match_in_period=True,
         between=[
-            "first_day_of_month(index_date) - 11 months",
+            "astinvite_1_date + 6 days",
             "last_day_of_month(index_date)",
-        ],
-        include_date_of_match=True,
-        date_format="YYYY-MM-DD",
-    ),
-    # Latest asthma invite date 7 days before the last one
-    astinvite_1=patients.with_these_clinical_events(
-        codelist=astinvite_cod,
-        returning="binary_flag",
-        find_last_match_in_period=True,
-        between=[
-            "first_day_of_month(index_date) - 11 months",
-            "astinvite_2_date - 7 days",
         ],
     ),
 ##############################
  
  # Rule 6
 
- # Exclude people who were diagnoses with asthma in the last 3 months
-    ast_recent_diag_excl=patients.satisfying(
-        """
-        
-        """,
-        first_ast_diag=patients.with_these_clinical_events(
-                    ast_cod,
-                    on_or_before="last_day_of_month(index_date)",
-                    returning='date',
-                    date_format="YYYY-MM-DD",
-                    find_first_match_in_period=True,
-            ),
+ # Exclude people who were diagnosed with asthma in the last 3 months
 
+    ast_diag_max_4_months=patients.with_these_clinical_events(
+            ast_cod,
+            on_or_before="first_day_of_month(index_date) - 2 months",
+            returning='binary_flag',
+            return_expectations={"incidence": 0.10},
+        ),
+##############################
+ 
+ # Rule 7
+
+# Reject patients passed to this rule who registered with the GP practice
+# in the 3 month period leading up to and including the payment period end
+# date. Select the remaining patients.
+    registered_3mo=patients.registered_with_one_practice_between(
+        start_date="first_day_of_month(index_date) - 2 months",
+        end_date="last_day_of_month(index_date)",
+        return_expectations={"incidence": 0.1},
+    ),
+          
+##############################          
+
+ast007_denom=patients.satisfying(
+    """
+    ast007_rule1
+
+    OR
+
+    (
+    NOT astpcapu AND 
+    NOT astmondec AND
+    NOT astpcadec AND
+    (astinvite_1 AND astinvite_2) AND
+    (ast_diag_max_4_months)
     )
-            
-            
+    
 
-            
+
+    """
+),
 
 
 
