@@ -60,7 +60,7 @@ actions:
     run: > 
       cohortextractor:latest generate_cohort 
       --study-definition study_definition_ast_reg 
-      --index-date-range "2021-04-01 to 2022-03-01 by month" 
+      --index-date-range "2019-03-01 to 2022-03-31 by month" 
       --output-dir=output
       --output-format=csv
     outputs:
