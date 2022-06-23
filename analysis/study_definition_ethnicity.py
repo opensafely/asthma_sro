@@ -10,7 +10,7 @@ from datetime import date
 
 from config import end_date
 
-from codelists import ethnicity_codes
+from codelists_demographic import ethnicity6_codes
 
 study = StudyDefinition(
     default_expectations={
@@ -21,7 +21,7 @@ study = StudyDefinition(
     population=patients.all(),
     # ETHNICITY IN 6 CATEGORIES
     eth=patients.with_these_clinical_events(
-        ethnicity_codes,
+        ethnicity6_codes,
         returning="category",
         find_last_match_in_period=True,
         include_date_of_match=False,
