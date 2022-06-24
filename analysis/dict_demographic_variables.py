@@ -67,7 +67,7 @@ demographic_variables = dict(
     imd=patients.categorised_as(
         {
             "missing": "DEFAULT",
-            "1": """index_of_multiple_deprivation>=1 AND
+            "1": """index_of_multiple_deprivation>=0 AND
                   index_of_multiple_deprivation < 32844*1/5""",
             "2": """index_of_multiple_deprivation >= 32844*1/5 AND
                   index_of_multiple_deprivation < 32844*2/5""",

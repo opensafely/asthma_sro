@@ -7,10 +7,10 @@ from config import demographics, codelist_path, vertical_lines
 from ebmdatalab import charts
 
 BASE_DIR = Path(__file__).parents[1]
-OUTPUT_DIR = BASE_DIR / "output"
+OUTPUT_DIR = BASE_DIR / "output" 
 
 #import measures
-from study_definition import measures
+from study_definition_ast_reg import measures
 
 
 
@@ -24,7 +24,7 @@ print(measures_dict)
 
 for key, value in measures_dict.items():
     
-    df = pd.read_csv(os.path.join(OUTPUT_DIR, f'measure_{value.id}.csv'), parse_dates=['date']).sort_values(by='date')
+    df = pd.read_csv(os.path.join(OUTPUT_DIR, 'joined',f'measure_{value.id}.csv'), parse_dates=['date']).sort_values(by='date')
     df = drop_missing_demographics(df, value.group_by[0])
 
     # if key == "ethnicity_rate":
@@ -43,7 +43,7 @@ for key, value in measures_dict.items():
 
 
     # get total population rate
-    if value.id=='practice_rate':
+    if value.id=='ast_reg_practice_rate':
         
         df = drop_irrelevant_practices(df, 'practice')
         df.to_csv(os.path.join(OUTPUT_DIR, f'rate_table_{value.group_by[0]}.csv'), index=False)

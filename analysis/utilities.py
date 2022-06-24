@@ -122,50 +122,50 @@ def drop_irrelevant_practices(df, practice_col):
     return df[df[practice_col].isin(is_relevant[is_relevant == True].index)]
 
 
-def create_child_table(
-    df, code_df, code_column, term_column, nrows=5
-):
+# def create_child_table(
+#     df, code_df, code_column, term_column, nrows=5
+# ):
 
-    """
-    Args:
-        df: A measure table.
-        code_df: A codelist table.
-        code_column: The name of the code column in the codelist table.
-        term_column: The name of the term column in the codelist table.
-        measure: The measure ID.
-        nrows: The number of rows to display.
-    Returns:
-        A table of the top `nrows` codes.
-    """
+#     """
+#     Args:
+#         df: A measure table.
+#         code_df: A codelist table.
+#         code_column: The name of the code column in the codelist table.
+#         term_column: The name of the term column in the codelist table.
+#         measure: The measure ID.
+#         nrows: The number of rows to display.
+#     Returns:
+#         A table of the top `nrows` codes.
+#     """
  
-    event_counts = (
-        df.groupby("event_code")["ast_population"]
-        .sum()  # We can't use .count() because the measure column contains zeros.
-        .rename_axis(code_column)
-        .rename("Events")
-        .reset_index()
-        .sort_values("Events", ascending=False)
-    )
+#     event_counts = (
+#         df.groupby("event_code")["ast_population"]
+#         .sum()  # We can't use .count() because the measure column contains zeros.
+#         .rename_axis(code_column)
+#         .rename("Events")
+#         .reset_index()
+#         .sort_values("Events", ascending=False)
+#     )
 
     
-    event_counts["Events (thousands)"] = event_counts["Events"] / 1000
+#     event_counts["Events (thousands)"] = event_counts["Events"] / 1000
        
-    # Gets the human-friendly description of the code for the given row
-    # e.g. "Systolic blood pressure".
-    code_df = code_df.set_index(code_column).rename(
-        columns={term_column: "Description"}
-    )
-    event_counts = (
-        event_counts.set_index(code_column).join(code_df).reset_index()
-    )
+#     # Gets the human-friendly description of the code for the given row
+#     # e.g. "Systolic blood pressure".
+#     code_df = code_df.set_index(code_column).rename(
+#         columns={term_column: "Description"}
+#     )
+#     event_counts = (
+#         event_counts.set_index(code_column).join(code_df).reset_index()
+#     )
 
     
-    # Cast the code to an integer.
-    event_counts[code_column] = event_counts[code_column].astype(int)
+#     # Cast the code to an integer.
+#     event_counts[code_column] = event_counts[code_column].astype(int)
     
-    # return top n rows
+#     # return top n rows
     
-    return event_counts.iloc[:nrows, :]
+#     return event_counts.iloc[:nrows, :]
 
 def get_number_practices(df):
     """Gets the number of practices in the given measure table.
