@@ -22,6 +22,8 @@ study = StudyDefinition(
         (NOT died) AND
         # Define GMS registration status
         gms_reg_status AND
+        # Sex only valid values
+        (sex = 'M' OR sex = 'F') AND
         # Asthma list size age restriction
         age >= 6
         """,
