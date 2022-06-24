@@ -20,8 +20,11 @@ study = StudyDefinition(
         """
         # Define general population parameters
         (NOT died) AND
+        (sex = 'M' OR sex = 'F') AND
+        (age_band != 'missing') AND
         # Define GMS registration status
         gms_reg_status AND
+
         # Asthma list size age restriction
         age >= 6
         """,
