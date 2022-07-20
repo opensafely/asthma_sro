@@ -38,14 +38,14 @@ study = StudyDefinition(
 # Create default measures
 measures = [
     Measure(
-        id="ast_reg_had_asthma_drug_treatment_population_rate",
+        id="ast_reg_population_rate",
         numerator="had_asthma_drug_treatment",
         denominator="population",
         group_by=["population"],
         small_number_suppression=True,
     ),
     Measure(
-        id="practice_rate",
+        id="ast_reg_practice_rate",
         numerator="had_asthma_drug_treatment",
         denominator="population",
         group_by=["practice"],
