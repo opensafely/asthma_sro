@@ -27,6 +27,7 @@ demographic_variables = dict(
             "int": {"distribution": "population_ages"},
         },
     ),
+    #Age_band label for youngest band group change to be 6-19, reflecting the Asthma specific study population
     age_band=patients.categorised_as(
         {
             "missing": "DEFAULT",
