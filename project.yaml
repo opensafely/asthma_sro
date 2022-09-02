@@ -26,9 +26,9 @@ actions:
 
   join_ethnicity_ast_reg:
     run: >
-      cohort-joiner:v0.0.12 
+      cohort-joiner:v0.0.46 
         --lhs output/input_ast*.csv
-        --rhs output/input_ethnicity*.csv
+        --rhs output/input_ethnicity.csv
         --output-dir output/joined
     needs: [generate_study_population_ethnicity, generate_study_population_ast_reg]
     outputs:
@@ -44,6 +44,24 @@ actions:
      outputs:
        moderately_sensitive:
          measure_csv: output/joined/measure_ast_reg_*_rate.csv
+
+  join_measures_register:
+      run: python:latest python analysis/join_and_round.py
+           --input-list output/joined/measure_ast_reg_total_rate.csv
+           --input-list output/joined/measure_ast_reg_age_band_rate.csv
+           --input-list output/joined/measure_ast_reg_care_home_rate.csv
+           --input-list output/joined/measure_ast_reg_ethnicity_rate.csv
+           --input-list output/joined/measure_ast_reg_imd_rate.csv
+           --input-list output/joined/measure_ast_reg_learning_disability_rate.csv
+           --input-list output/joined/measure_ast_reg_region_rate.csv
+           --input-list output/joined/measure_ast_reg_sex_rate.csv
+           --output-dir output/joined/summary
+           --output-name "measure_register.csv"
+      needs: [generate_measures_ast_reg]
+      outputs:
+        moderately_sensitive:
+          # Only output the single summary file
+          measure_csv: output/joined/summary/measure_register.csv         
   
   calculate_rates_ast_reg:
       run: python:latest python analysis/rate_calculations.py
@@ -53,6 +71,50 @@ actions:
           tables: output/rate_table_*.csv
           plots: output/plot_*.png
           decile_chart: output/decile_chart.png
+ #############################
+  # Plotting
+  #############################
+  generate_qof_deciles_charts:
+    run: >
+            deciles-charts:v0.0.15
+            --input-files output/joined/measure_*_practice_rate.csv
+            --output-dir output/joined
+    config:
+      show_outer_percentiles: false
+      tables:
+        output: true
+      charts:
+        output: true
+    needs: [generate_measures_ast_reg]
+    outputs:
+      moderately_sensitive:
+        cohort: output/joined/deciles_*_*.*
+
+  generate_qof_groups:
+    run: >
+            python:latest python analysis/group_charts.py
+            --input-files output/joined/measure_ast_reg_*.csv
+            --output-dir output/joined
+            --date-lines "2019-03-31" "2020-03-31" "2021-03-31"
+            --scale "percentage"
+    needs: [generate_measures_ast_reg]
+    outputs:
+      moderately_sensitive:
+        cohort: output/joined/group_chart_*.png
+
+  generate_all_breakdowns:
+    run: >
+            python:latest python analysis/panel_plots.py
+            --input-file output/joined/summary/measure_register.csv
+            --measures-pattern "*_rate"
+            --output-dir output/joined/summary
+            --output-name "asthma_register_by_demographic_group"
+            --date-lines "2019-03-31" "2020-03-31" "2021-03-31"
+            --scale "percentage"
+    needs: [join_measures_register]
+    outputs:
+      moderately_sensitive:
+        cohort: output/joined/summary/asthma_register_by_demographic_group.png
 
   # generate_notebook:
   #   run: jupyter:latest jupyter nbconvert /workspace/analysis/qof_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
