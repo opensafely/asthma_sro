@@ -111,14 +111,27 @@ actions:
             --output-name "asthma_register_by_demographic_group"
             --date-lines "2019-03-31" "2020-03-31" "2021-03-31"
             --scale "percentage"
-    needs: [join_measures_register]
+    needs: [generate_measures_ast_reg,join_measures_register]
     outputs:
       moderately_sensitive:
         cohort: output/joined/summary/asthma_register_by_demographic_group.png
-
+ #############################
+ #Table 1
+#############################
   generate_notebook_ast_reg:
     run: jupyter:latest jupyter nbconvert /workspace/analysis/Table1_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
     needs: [join_measures_register]
     outputs:
       moderately_sensitive:
         notebook: output/Table1_notebook.html
+
+
+  # generate_table1:
+  #   run: >
+  #           python:latest python analysis/table1.py
+  #           --input-dir output/joined
+  #           --output-dir output/joined
+  #   needs: [generate_measures_ast_reg, join_measures_register]
+  #   outputs:
+  #     moderately_sensitive:
+  #       cohort: output/joined/summary/table1.csv
