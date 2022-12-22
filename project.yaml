@@ -125,6 +125,13 @@ actions:
       moderately_sensitive:
         notebook: output/Table1_notebook.html
 
+  generate_tab1_r:
+    run: r:latest analysis/table1.r
+    needs: [join_measures_register]
+    outputs:
+      moderately_sensitive:
+        tab1_html: output/joined/summary/tab1_ast005_fy2122.html
+
 
   # generate_table1:
   #   run: >
