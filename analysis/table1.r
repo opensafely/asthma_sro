@@ -13,7 +13,7 @@ df_measures_ast_reg <- read_csv(here("output/joined/summary/measure_register.csv
 # the second option only makes sense if you want to present multiple NHS FYs in
 # your table 1. This would require some code adaptations further down.
 df_measures_ast_reg_date <- df_measures_ast_reg %>%
-  filter(date == "2022-03-01")
+  filter(date == "2022-03-31")
 # filter(month(date) == 3)
 
 # Tidy up data ----
@@ -30,7 +30,9 @@ df_measures_ast_reg_tidy <- df_measures_ast_reg_date %>%
       category == "population" ~ "",
       category == "sex" & group == "F" ~ "Female",
       category == "sex" & group == "M" ~ "Male",
-      category == "sex" & group == "" ~ "Unknown",
+      category == "sex" & group == "" ~ "(Missing)",
+      category == "age_band" & group == "missing" ~ "(Missing)",
+      category == "ethnicity" & is.na(group) ~ "(Missing)",
       category == "learning_disability" & group == "1" ~ "Yes",
       category == "learning_disability" & group == "0" ~ "No",
       category == "care_home" & group == "1" ~ "Yes",
@@ -42,9 +44,11 @@ df_measures_ast_reg_tidy <- df_measures_ast_reg_date %>%
     ),
     category = factor(category,
       levels = c("population", "sex", "age_band", "ethnicity", "imd", "region", "care_home", "learning_disability"),
-      labels = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record or learning disability")
+      labels = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")
     )
   ) %>%
+  arrange(factor(group, levels = c("6-19","20-29","30-39","40-49","50-59","60-69","70-79","80+","1 - Most deprived","2","3","4","5 - Least deprived",
+        "Black", "Mixed", "Other", "South Asian", "White", "(Missing)"))) %>%
   select(indicator, date, numerator, denominator, pct = value, category, group)
 
 # Prepare data for creating table ----
@@ -65,7 +69,7 @@ gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
     rowname_col = "group",
     groupname_col = "category"
   ) %>%
-  row_group_order(groups = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record or learning disability")) %>%
+  row_group_order(groups = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")) %>%
   tab_spanner(
     label = "AST005 (Age >= 6)",
     columns = c("ast005_fy2122_numerator", "ast005_fy2122_denominator", "ast005_fy2122_pct")
@@ -84,6 +88,14 @@ gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
     columns = c("ast005_fy2122_pct"),
     decimals = 2,
     use_seps = TRUE
+  ) %>%
+  text_transform(
+    locations = cells_body(
+      columns = c(ast005_fy2122_numerator, ast005_fy2122_denominator, ast005_fy2122_pct)),
+    fn = function(x){
+      case_when(x == "NA" ~ "-",
+                TRUE ~ x)
+    }
   )
 
 # Write table as png file ----

@@ -11,7 +11,7 @@ actions:
     run: > 
       cohortextractor:latest generate_cohort 
       --study-definition study_definition_ast_reg 
-      --index-date-range "2019-03-01 to 2022-03-31 by month" 
+      --index-date-range "2019-03-01 to 2022-12-31 by month" 
       --output-dir=output
       --output-format=csv
     outputs:
@@ -95,7 +95,7 @@ actions:
             python:latest python analysis/group_charts.py
             --input-files output/joined/measure_ast_reg_*.csv
             --output-dir output/joined
-            --date-lines "2019-03-31" "2020-03-31" "2021-03-31"
+            --date-lines "2019-03-31" "2020-03-31" "2021-03-31" "2022-03-31"
             --scale "percentage"
     needs: [generate_measures_ast_reg]
     outputs:
@@ -109,7 +109,7 @@ actions:
             --measures-pattern "*_rate"
             --output-dir output/joined/summary
             --output-name "asthma_register_by_demographic_group"
-            --date-lines "2019-03-31" "2020-03-31" "2021-03-31"
+            --date-lines "2019-03-31" "2020-03-31" "2021-03-31" "2022-03-31"
             --scale "percentage"
     needs: [generate_measures_ast_reg,join_measures_register]
     outputs:
