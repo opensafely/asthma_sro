@@ -13,7 +13,7 @@ df_measures_ast_reg <- read_csv(here("output/joined/summary/measure_register.csv
 # the second option only makes sense if you want to present multiple NHS FYs in
 # your table 1. This would require some code adaptations further down.
 df_measures_ast_reg_date <- df_measures_ast_reg %>%
-  filter(date == "2022-03-31")
+  filter(date == "2022-03-01")
 # filter(month(date) == 3)
 
 # Tidy up data ----
@@ -63,6 +63,12 @@ df_measures_ast_reg_tidy_tab <- df_measures_ast_reg_tidy %>%
     values_from = c("value")
   )
 
+# head(df_measures_ast_reg_tidy[df_measures_ast_reg_tidy$category == "Ethnicity"])
+# head(df_measures_ast_reg_tidy)
+ head(df_measures_ast_reg_tidy_tab)
+# head(gt_tab1_ast005_fy2122)
+
+
 # Create table ----
 gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
   gt(
@@ -98,5 +104,5 @@ gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
     }
   )
 
-# Write table as png file ----
+# Write table as html file ----
 gtsave(gt_tab1_ast005_fy2122, here("output", "joined", "summary", "tab1_ast005_fy2122.html"))
