@@ -63,14 +63,6 @@ actions:
           # Only output the single summary file
           measure_csv: output/joined/summary/measure_register.csv         
   
-  calculate_rates_ast_reg:
-      run: python:latest python analysis/rate_calculations.py
-      needs: [generate_measures_ast_reg]
-      outputs:
-        moderately_sensitive:
-          tables: output/rate_table_*.csv
-          plots: output/plot_*.png
-          decile_chart: output/decile_chart.png
  #############################
   # Plotting
   #############################
@@ -118,12 +110,12 @@ actions:
  #############################
  #Table 1
 #############################
-  generate_notebook_ast_reg:
-    run: jupyter:latest jupyter nbconvert /workspace/analysis/Table1_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
-    needs: [join_measures_register]
-    outputs:
-      moderately_sensitive:
-        notebook: output/Table1_notebook.html
+  # generate_notebook_ast_reg:
+  #   run: jupyter:latest jupyter nbconvert /workspace/analysis/Table1_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
+  #   needs: [join_measures_register]
+  #   outputs:
+  #     moderately_sensitive:
+  #       notebook: output/Table1_notebook.html
 
   generate_tab1_r:
     run: r:latest analysis/table1.r
