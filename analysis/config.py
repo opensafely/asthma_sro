@@ -2,7 +2,7 @@
 start_date = "2019-03-01"
 
 #study end date.  should match date in project.yaml
-end_date = "2022-03-31"
+end_date = "2022-12-31"
 
 #demographic variables by which code use is broken down
 #select from ["sex", "age_band", "region", "imd", "ethnicity", "learning_disability"]
