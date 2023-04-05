@@ -66,6 +66,7 @@ df_measures_ast_reg_tidy_tab <- df_measures_ast_reg_tidy %>%
 # head(df_measures_ast_reg_tidy[df_measures_ast_reg_tidy$category == "Ethnicity"])
 # head(df_measures_ast_reg_tidy)
  head(df_measures_ast_reg_tidy_tab)
+ colnames(df_measures_ast_reg_tidy_tab)
 # head(gt_tab1_ast005_fy2122)
 
 
