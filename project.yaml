@@ -71,6 +71,30 @@ actions:
           tables: output/rate_table_*.csv
           plots: output/plot_*.png
           decile_chart: output/decile_chart.png
+
+#############################
+  # ehrQL study definition
+#############################
+  generate_ehrql_dataset_table:
+    run: ehrql:v0 generate-dataset analysis/ehrql_define_dataset_table.py
+      --index-date-range "2019-03-01 to 2023-08-01 by month"
+      --output output/ehrql/dataset_table.csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/ehrql/dataset_table.csv.gz
+
+#############################
+  # ehrQL measures
+#############################
+  create_ehrql_measures:
+    run: ehrql:v0 generate-measures analysis/ehrql_measures.py
+      --output output/ehrql/measures.csv
+    outputs:
+      moderately_sensitive:
+        measure_csv: output/ehrql/measures.csv
+
+
+
  #############################
   # Plotting
   #############################
