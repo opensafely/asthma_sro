@@ -77,7 +77,7 @@ actions:
   # ehrQL study definition
 #############################
   generate_ehrql_dataset_table:
-    run: ehrql:v0 generate-dataset analysis/ehrql_define_dataset_table.py
+    run: ehrql:v0 generate-dataset analysis/ehrQL_code/ehrql_define_dataset_table.py
       --output output/ehrql/dataset_table.csv.gz
     outputs:
       highly_sensitive:
@@ -87,7 +87,7 @@ actions:
   # ehrQL measures
 #############################
   create_ehrql_measures:
-    run: ehrql:v0 generate-measures analysis/ehrql_measures_test1.py
+    run: ehrql:v0 generate-measures analysis/ehrQL_code/ehrql_measures_test1.py
       --output output/ehrql/measures.csv
     outputs:
       moderately_sensitive:
