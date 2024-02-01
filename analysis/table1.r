@@ -13,7 +13,7 @@ df_measures_ast_reg <- read_csv(here("output/joined/summary/measure_register.csv
 # the second option only makes sense if you want to present multiple NHS FYs in
 # your table 1. This would require some code adaptations further down.
 df_measures_ast_reg_date <- df_measures_ast_reg %>%
-  filter(date == "2022-03-01")
+  filter(date == "2023-03-01")
 # filter(month(date) == 3)
 
 # Tidy up data ----
