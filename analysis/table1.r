@@ -65,45 +65,57 @@ df_measures_ast_reg_tidy_tab <- df_measures_ast_reg_tidy %>%
 
 # head(df_measures_ast_reg_tidy[df_measures_ast_reg_tidy$category == "Ethnicity"])
 # head(df_measures_ast_reg_tidy)
- head(df_measures_ast_reg_tidy_tab)
- colnames(df_measures_ast_reg_tidy_tab)
-# head(gt_tab1_ast005_fy2122)
+# colnames(df_measures_ast_reg_tidy_tab)
+# head(gt_tab1_ast005_fy2223)
 
 
 # Create table ----
-gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
+gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
   gt(
     rowname_col = "group",
     groupname_col = "category"
   ) %>%
   row_group_order(groups = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")) %>%
   tab_spanner(
-    label = "AST005 (Age >= 6)",
-    columns = c("ast005_fy2122_numerator", "ast005_fy2122_denominator", "ast005_fy2122_pct")
+    label = md("**AST005 (Age >= 6)**"),
+    columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
   ) %>%
   cols_label(
-    ast005_fy2122_numerator = "Register",
-    ast005_fy2122_denominator = "List size",
-    ast005_fy2122_pct = "Prevalence"
+    ast005_fy2223_numerator = "Register",
+    ast005_fy2223_denominator = "List size",
+    ast005_fy2223_pct = "Prevalence"
   ) %>%
   fmt_number(
-    columns = c("ast005_fy2122_numerator", "ast005_fy2122_denominator"),
+    columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator"),
     decimals = 0,
     use_seps = TRUE
   ) %>%
   fmt_percent(
-    columns = c("ast005_fy2122_pct"),
+    columns = c("ast005_fy2223_pct"),
     decimals = 2,
     use_seps = TRUE
   ) %>%
   text_transform(
     locations = cells_body(
-      columns = c(ast005_fy2122_numerator, ast005_fy2122_denominator, ast005_fy2122_pct)),
+      columns = c(ast005_fy2223_numerator, ast005_fy2223_denominator, ast005_fy2223_pct)),
     fn = function(x){
       case_when(x == "NA" ~ "-",
                 TRUE ~ x)
     }
+  ) 
+
+gt_tab1_ast005_fy2223 <- gt_tab1_ast005_fy2223 %>%
+  tab_options(
+    column_labels.font.size = "small",
+    table.font.size = "small",
+    row_group.font.size = "small",
+    row_group.font.weight = "bold",
+    data_row.padding = px(2)
+  ) %>%
+  tab_stub_indent(
+    rows = everything(),
+    indent = 2
   )
 
 # Write table as html file ----
-gtsave(gt_tab1_ast005_fy2122, here("output", "joined", "summary", "tab1_ast005_fy2122.html"))
+gtsave(gt_tab1_ast005_fy2223, here("output", "joined", "summary", "tab1_ast005_fy2223.html"))
