@@ -1,13 +1,23 @@
-from cohortextractor import StudyDefinition, patients, Measure
 
+# Import functions
 import json
 import pandas as pd
 
+from cohortextractor import (
+    StudyDefinition,
+    patients,
+    codelist,
+    Measure
+)
+
+#Import codelists and variables 
 from config import start_date, end_date
+
 from codelists_ast import ast_cod, asttrt_cod, astres_cod
 
 from dict_ast_variables import ast_reg_variables
 from dict_demographic_variables import demographic_variables
+
 
 study = StudyDefinition(
     index_date=start_date,

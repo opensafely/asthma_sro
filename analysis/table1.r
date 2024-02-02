@@ -6,14 +6,14 @@ library(gt)
 
 # Load data ----
 df_measures_ast_reg <- read_csv(here("output/joined/summary/measure_register.csv"))
-#test
+# test
 # Filter data to only include dates needed for table 1
 # filter(date == "2022-03-01") only includes financial year 2021/22
 # filter(month(date) == 3) would include all march data, i.e., all NHS FYs
 # the second option only makes sense if you want to present multiple NHS FYs in
 # your table 1. This would require some code adaptations further down.
 df_measures_ast_reg_date <- df_measures_ast_reg %>%
-  filter(date == "2022-03-01")
+  filter(date == "2023-03-01")
 # filter(month(date) == 3)
 
 # Tidy up data ----
@@ -47,8 +47,11 @@ df_measures_ast_reg_tidy <- df_measures_ast_reg_date %>%
       labels = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")
     )
   ) %>%
-  arrange(factor(group, levels = c("6-19","20-29","30-39","40-49","50-59","60-69","70-79","80+","1 - Most deprived","2","3","4","5 - Least deprived",
-        "Black", "Mixed", "Other", "South Asian", "White", "(Missing)"))) %>%
+  arrange(factor(group, levels = c(
+    "6-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+",
+    "1 - Most deprived", "2", "3", "4", "5 - Least deprived",
+    "Black", "Mixed", "Other", "South Asian", "White", "(Missing)"
+  ))) %>%
   select(indicator, date, numerator, denominator, pct = value, category, group)
 
 # Prepare data for creating table ----
@@ -65,45 +68,62 @@ df_measures_ast_reg_tidy_tab <- df_measures_ast_reg_tidy %>%
 
 # head(df_measures_ast_reg_tidy[df_measures_ast_reg_tidy$category == "Ethnicity"])
 # head(df_measures_ast_reg_tidy)
- head(df_measures_ast_reg_tidy_tab)
- colnames(df_measures_ast_reg_tidy_tab)
-# head(gt_tab1_ast005_fy2122)
+# colnames(df_measures_ast_reg_tidy_tab)
+# head(gt_tab1_ast005_fy2223)
 
 
 # Create table ----
-gt_tab1_ast005_fy2122 <- df_measures_ast_reg_tidy_tab %>%
+gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
   gt(
     rowname_col = "group",
     groupname_col = "category"
   ) %>%
-  row_group_order(groups = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")) %>%
+  row_group_order(groups = c(
+    "Population", "Sex", "Age band", "Ethnicity", "IMD", "Region",
+    "Care home status", "Record of learning disability"
+  )) %>%
   tab_spanner(
-    label = "AST005 (Age >= 6)",
-    columns = c("ast005_fy2122_numerator", "ast005_fy2122_denominator", "ast005_fy2122_pct")
+    label = md("**AST005 (Age >= 6)**"),
+    columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
   ) %>%
   cols_label(
-    ast005_fy2122_numerator = "Register",
-    ast005_fy2122_denominator = "List size",
-    ast005_fy2122_pct = "Prevalence"
+    ast005_fy2223_numerator = "Register",
+    ast005_fy2223_denominator = "List size",
+    ast005_fy2223_pct = "Prevalence"
   ) %>%
   fmt_number(
-    columns = c("ast005_fy2122_numerator", "ast005_fy2122_denominator"),
+    columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator"),
     decimals = 0,
     use_seps = TRUE
   ) %>%
   fmt_percent(
-    columns = c("ast005_fy2122_pct"),
+    columns = c("ast005_fy2223_pct"),
     decimals = 2,
     use_seps = TRUE
   ) %>%
   text_transform(
     locations = cells_body(
-      columns = c(ast005_fy2122_numerator, ast005_fy2122_denominator, ast005_fy2122_pct)),
-    fn = function(x){
-      case_when(x == "NA" ~ "-",
-                TRUE ~ x)
+
+      columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
+    ),
+    fn = function(x) {
+      case_when(
+        x == "NA" ~ "-",
+        TRUE ~ x
+      )
+
     }
   )
 
+gt_tab1_ast005_fy2223 <- gt_tab1_ast005_fy2223 %>%
+  tab_options(
+    column_labels.font.size = "small",
+    table.font.size = "small",
+    row_group.font.size = "small",
+    row_group.font.weight = "bold",
+    data_row.padding = px(2)
+  )
+
+
 # Write table as html file ----
-gtsave(gt_tab1_ast005_fy2122, here("output", "joined", "summary", "tab1_ast005_fy2122.html"))
+gtsave(gt_tab1_ast005_fy2223, here("output", "joined", "summary", "tab1_ast005_fy2223.html"))
