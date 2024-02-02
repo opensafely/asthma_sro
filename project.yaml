@@ -11,7 +11,7 @@ actions:
     run: > 
       cohortextractor:latest generate_cohort 
       --study-definition study_definition_ast_reg 
-      --index-date-range "2019-04-01 to 2023-09-30 by month" 
+      --index-date-range "2019-03-01 to 2023-09-30 by month" 
       --output-dir=output
       --output-format=csv
     outputs:
@@ -111,7 +111,8 @@ actions:
     needs: [generate_measures_ast_reg]
     outputs:
       moderately_sensitive:
-        cohort: output/joined/deciles_*_*.png output/joined/deciles_*_*.csv  
+        deciles_charts: output/joined/deciles_*.png 
+        deciles_tables: output/joined/deciles_*.csv  
 
   generate_qof_groups:
     run: >
@@ -148,12 +149,9 @@ actions:
   #     moderately_sensitive:
   #       notebook: output/Table1_notebook.html
 
-  # generate_table1:
-  #   run: >
-  #           python:latest python analysis/table1.py
-  #           --input-dir output/joined
-  #           --output-dir output/joined
-  #   needs: [generate_measures_ast_reg, join_measures_register]
-  #   outputs:
-  #     moderately_sensitive:
-  #       cohort: output/joined/summary/table1.csv
+  generate_table1:
+    run: r:latest analysis/table1.r
+    needs: [join_measures_register]
+    outputs:
+      moderately_sensitive:
+        table: output/joined/summary/tab1_ast005_fy2223.html

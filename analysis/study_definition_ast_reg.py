@@ -3,6 +3,12 @@
 import json
 import pandas as pd
 
+from cohortextractor import (
+    StudyDefinition,
+    patients,
+    codelist,
+    Measure
+)
 
 #Import codelists and variables 
 from config import start_date, end_date
