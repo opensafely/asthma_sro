@@ -103,6 +103,7 @@ gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
   ) %>%
   text_transform(
     locations = cells_body(
+
       columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
     ),
     fn = function(x) {
@@ -110,6 +111,7 @@ gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
         x == "NA" ~ "-",
         TRUE ~ x
       )
+
     }
   )
 
@@ -121,6 +123,7 @@ gt_tab1_ast005_fy2223 <- gt_tab1_ast005_fy2223 %>%
     row_group.font.weight = "bold",
     data_row.padding = px(2)
   )
+
 
 # Write table as html file ----
 gtsave(gt_tab1_ast005_fy2223, here("output", "joined", "summary", "tab1_ast005_fy2223.html"))
