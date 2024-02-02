@@ -73,6 +73,7 @@ actions:
           plots: output/plot_*.png
           decile_chart: output/decile_chart.png
 
+
 # #############################
 #   # ehrQL study definition
 # #############################
@@ -92,6 +93,7 @@ actions:
 #     outputs:
 #       moderately_sensitive:
 #         measure_csv: output/ehrql/measures.csv
+
 
 
  #############################
