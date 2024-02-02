@@ -6,7 +6,7 @@ library(gt)
 
 # Load data ----
 df_measures_ast_reg <- read_csv(here("output/joined/summary/measure_register.csv"))
-#test
+# test
 # Filter data to only include dates needed for table 1
 # filter(date == "2022-03-01") only includes financial year 2021/22
 # filter(month(date) == 3) would include all march data, i.e., all NHS FYs
@@ -47,8 +47,11 @@ df_measures_ast_reg_tidy <- df_measures_ast_reg_date %>%
       labels = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")
     )
   ) %>%
-  arrange(factor(group, levels = c("6-19","20-29","30-39","40-49","50-59","60-69","70-79","80+","1 - Most deprived","2","3","4","5 - Least deprived",
-        "Black", "Mixed", "Other", "South Asian", "White", "(Missing)"))) %>%
+  arrange(factor(group, levels = c(
+    "6-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+",
+    "1 - Most deprived", "2", "3", "4", "5 - Least deprived",
+    "Black", "Mixed", "Other", "South Asian", "White", "(Missing)"
+  ))) %>%
   select(indicator, date, numerator, denominator, pct = value, category, group)
 
 # Prepare data for creating table ----
@@ -75,7 +78,10 @@ gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
     rowname_col = "group",
     groupname_col = "category"
   ) %>%
-  row_group_order(groups = c("Population", "Sex", "Age band", "Ethnicity", "IMD", "Region", "Care home status", "Record of learning disability")) %>%
+  row_group_order(groups = c(
+    "Population", "Sex", "Age band", "Ethnicity", "IMD", "Region",
+    "Care home status", "Record of learning disability"
+  )) %>%
   tab_spanner(
     label = md("**AST005 (Age >= 6)**"),
     columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
@@ -97,10 +103,13 @@ gt_tab1_ast005_fy2223 <- df_measures_ast_reg_tidy_tab %>%
   ) %>%
   text_transform(
     locations = cells_body(
-      columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")),
-    fn = function(x){
-      case_when(x == "NA" ~ "-",
-                TRUE ~ x)
+      columns = c("ast005_fy2223_numerator", "ast005_fy2223_denominator", "ast005_fy2223_pct")
+    ),
+    fn = function(x) {
+      case_when(
+        x == "NA" ~ "-",
+        TRUE ~ x
+      )
     }
   )
 
