@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from dateutil import parser
 
-MEASURE_FNAME_REGEX = re.compile(r"measure_ast_reg_(?P<id>\w+)\.csv")
+MEASURE_FNAME_REGEX = re.compile(r"measure_*_(?P<id>\w+)\.csv")
 
 
 def _get_denominator(measure_table):
