@@ -8,9 +8,6 @@ end_date = "2023-09-30"
 #select from ["sex", "age_band", "region", "imd", "ethnicity", "learning_disability"]
 demographics = ["sex", "age_band", "region", "imd", "ethnicity", "learning_disability", "care_home"]
 
-#name of measure
-marker="Asthma register"
-qof_measure_marker="AST005"
 
 #codelist path
 codelist_path = "codelists/nhsd-primary-care-domain-refsets-ast_cod.csv"

@@ -15,7 +15,7 @@ from config import start_date, end_date
 
 from codelists_ast import ast_cod, asttrt_cod, astres_cod
 
-from dict_ast_variables import ast_reg_variables
+from dict_ast_reg_variables import ast_reg_variables
 from dict_demographic_variables import demographic_variables
 
 

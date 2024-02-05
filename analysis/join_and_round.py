@@ -5,7 +5,7 @@ import glob
 
 import pandas
 
-MEASURE_FNAME_REGEX = re.compile(r"measure_ast_reg_(?P<id>\S+)\.csv")
+MEASURE_FNAME_REGEX = re.compile(r"measure_*_(?P<id>\S+)\.csv")
 
 
 def _check_for_practice(table):
@@ -32,7 +32,8 @@ def _reshape_data(measure_table):
         measure_table["category"] = "population"
         measure_table["group"] = "population"
         group_by = None
-        measure_table["name"] = measure_table.attrs["id"]
+        measure_table["name"] = measure_table.attrs["id"] 
+        measure_table['indicator']='astreg'
 
     else:
         denominator = measure_table.columns[-3]
@@ -40,6 +41,7 @@ def _reshape_data(measure_table):
         group_by = measure_table.columns[-5]
         measure_table["category"] = group_by
         measure_table["name"] = measure_table.attrs["id"]
+        measure_table['indicator']='astreg'
 
     measure_table.rename(
         columns={
@@ -49,6 +51,7 @@ def _reshape_data(measure_table):
         },
         inplace=True,
     )
+    
     # Assume we only need the numerator and the denominator
     measure_table.drop(columns=["population"], inplace=True, errors="ignore")
     return measure_table

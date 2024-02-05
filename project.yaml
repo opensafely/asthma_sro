@@ -5,8 +5,9 @@ expectations:
 
 actions:
 
-
+##########################################################
 # Asthma register (ast_reg) Dictionary method actions
+##########################################################
   generate_study_population_ast_reg:
     run: > 
       cohortextractor:latest generate_cohort 
@@ -45,6 +46,15 @@ actions:
        moderately_sensitive:
          measure_csv: output/joined/measure_ast_reg_*_rate.csv
 
+  calculate_rates_ast_reg:
+      run: python:latest python analysis/rate_calculations_ast_reg.py
+      needs: [generate_measures_ast_reg]
+      outputs:
+        moderately_sensitive:
+          tables: output/rate_table_ast_reg_*.csv
+          plots: output/plot_ast_reg_*.png
+          decile_chart: output/decile_chart.png
+
   join_measures_register:
       run: python:latest python analysis/join_and_round.py
            --input-list output/joined/measure_ast_reg_total_rate.csv
@@ -61,48 +71,64 @@ actions:
       outputs:
         moderately_sensitive:
           # Only output the single summary file
-          measure_csv: output/joined/summary/measure_register.csv         
-  
+          measure_csv: output/joined/summary/measure_register.csv  
+##########################################################
+ # Asthma indicator (ast007) Dictionary method actions
+##########################################################
+  generate_study_population_ast007:
+    run: cohortextractor:latest generate_cohort 
+      --study-definition study_definition_ast007 
+      --index-date-range "2019-03-01 to 2023-09-30 by month" 
+      --output-dir=output
+    outputs:
+      highly_sensitive:
+        cohort: output/input_ast007*.csv
 
-  calculate_rates_ast_reg:
-      run: python:latest python analysis/rate_calculations.py
-      needs: [generate_measures_ast_reg]
+  join_ethnicity_ast007:
+    run: >
+      cohort-joiner:'v0.0.56'
+        --lhs output/input_ast007*.csv
+        --rhs output/input_ethnicity.csv
+        --output-dir output/joined
+    needs: [generate_study_population_ethnicity, generate_study_population_ast007]
+    outputs:
+      highly_sensitive:
+        cohort: output/joined/input_ast007*.csv
+
+  generate_measures_ast007:
+      run: cohortextractor:latest generate_measures 
+        --study-definition study_definition_ast007 
+        --output-dir=output/joined
+      needs: [generate_study_population_ast007, generate_study_population_ethnicity, join_ethnicity_ast007]
       outputs:
         moderately_sensitive:
-          tables: output/rate_table_*.csv
-          plots: output/plot_*.png
-          decile_chart: output/decile_chart.png
+          measure_csv: output/joined/measure_*_rate.csv
 
-
-# #############################
-#   # ehrQL study definition
-# #############################
-#   generate_ehrql_dataset_table:
-#     run: ehrql:v0 generate-dataset analysis/ehrql_define_dataset_table.py
-#       --output output/ehrql/dataset_table.csv.gz
-#     outputs:
-#       highly_sensitive:
-#         cohort: output/ehrql/dataset_table.csv.gz
-
-# #############################
-#   # ehrQL measures
-# #############################
-#   create_ehrql_measures:
-#     run: ehrql:v0 generate-measures analysis/ehrql_measures_test1.py
-#       --output output/ehrql/measures.csv
-#     outputs:
-#       moderately_sensitive:
-#         measure_csv: output/ehrql/measures.csv
-
-
+  join_measures_ast007:
+      run: python:latest python analysis/join_and_round.py
+           --input-list output/joined/measure_ast007_total_rate.csv
+           --input-list output/joined/measure_ast007_age_band_rate.csv
+           --input-list output/joined/measure_ast007_care_home_rate.csv
+           --input-list output/joined/measure_ast007_ethnicity_rate.csv
+           --input-list output/joined/measure_ast007_imd_rate.csv
+           --input-list output/joined/measure_ast007_learning_disability_rate.csv
+           --input-list output/joined/measure_ast007_region_rate.csv
+           --input-list output/joined/measure_ast007_sex_rate.csv
+           --output-dir output/joined/summary
+           --output-name "measure_ast007.csv"
+      needs: [generate_measures_ast007]
+      outputs:
+        moderately_sensitive:
+          # Only output the single summary file
+          measure_csv: output/joined/summary/measure_ast007.csv  
 
  #############################
-  # Plotting
+  # Plotting 
   #############################
-  generate_qof_deciles_charts:
+  generate_astreg_deciles_charts:
     run: >
             deciles-charts:v0.0.15
-            --input-files output/joined/measure_*_practice_rate.csv
+            --input-files output/joined/measure_ast_reg_*_practice_rate.csv
             --output-dir output/joined
     config:
       show_outer_percentiles: false
@@ -113,8 +139,25 @@ actions:
     needs: [generate_measures_ast_reg]
     outputs:
       moderately_sensitive:
-        deciles_charts: output/joined/deciles_*.png 
-        deciles_tables: output/joined/deciles_*.csv  
+        deciles_charts: output/joined/deciles_ast_reg_*.png 
+        deciles_tables: output/joined/deciles_ast_reg_*.csv  
+
+  generate_ast007_deciles_charts:
+    run: >
+            deciles-charts:v0.0.15
+            --input-files output/joined/measure_ast007_*_practice_rate.csv
+            --output-dir output/joined
+    config:
+      show_outer_percentiles: false
+      tables:
+        output: true
+      charts:
+        output: true
+    needs: [generate_measures_ast007]
+    outputs:
+      moderately_sensitive:
+        deciles_charts: output/joined/deciles_ast007_*.png 
+        deciles_tables: output/joined/deciles_ast007_*.csv          
 
   generate_qof_groups:
     run: >
@@ -141,15 +184,6 @@ actions:
     outputs:
       moderately_sensitive:
         cohort: output/joined/summary/asthma_register_by_demographic_group.png
- #############################
- #Table 1
-#############################
-  # generate_notebook_ast_reg:
-  #   run: jupyter:latest jupyter nbconvert /workspace/analysis/Table1_notebook.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
-  #   needs: [join_measures_register]
-  #   outputs:
-  #     moderately_sensitive:
-  #       notebook: output/Table1_notebook.html
 
   generate_table1:
     run: r:latest analysis/table1.r
